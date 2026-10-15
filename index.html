@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sombre Zonwering - Rolluik & Screen Configurator PRO</title>
+    <style>
+        html, body { height: 100%; margin: 0; padding: 0; overflow: auto; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eef2f5; color: #1c1c1e; }
+        #app-container { display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; max-width: 1400px; margin: 0 auto; }
+        .step-header { background: #2c3e50; color: white; padding: 12px 15px; border-radius: 8px; margin: 30px 0 15px 0; font-size: 16px; font-weight: bold; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .step-header.client { background: #34c759; }
+        .dashboard-wrap { display: grid; grid-template-columns: 1fr; gap: 15px; align-content: start; }
+        @media(min-width:768px){ .dashboard-wrap { grid-template-columns: repeat(2, 1fr); } }
+        @media(min-width:1100px){ .dashboard-wrap { grid-template-columns: repeat(3, 1fr); } }
+        
+        .card { background: white; border-radius: 10px; padding: 15px; border: 1px solid #d1d1d6; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+        .card-title { font-size: 15px; font-weight: bold; color: #2c3e50; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #f39200; }
+        .card-calc { border: 2px solid #8e44ad; background: #fdf5ff; }
+        .card-calc .card-title { border-bottom-color: #8e44ad; color: #8e44ad; }
+        .card-item { background: #f0f7ff; border: 2px solid #005a9c; }
+        .card-item .card-title { border-bottom-color: #005a9c; color: #005a9c; }
+        .card-cart { background: #fffcf5; border: 2px solid #f39200; }
+        .card-cart .card-title { border-bottom-color: #f39200; color: #f39200; }
+        
+        .cart-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; font-size: 14px;}
+        .cart-item-info { flex: 1; }
+        .cart-item-price { font-weight: bold; margin-left: 15px; margin-right: 15px; color: #005a9c; font-size: 16px;}
+        .btn-delete { background: #e74c3c; color: white; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-weight: bold; }
+        .btn-edit { background: #3498db; color: white; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-weight: bold; margin-right: 5px; }
+        .btn-remove { background: #e74c3c; color: white; border: none; border-radius: 4px; padding: 0 10px; cursor: pointer; font-weight: bold; height:44px;}
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 13px; color: #555; margin-bottom: 4px; font-weight: 600; }
+        input[type="text"], input[type="number"], input[type="tel"], input[type="email"], select, textarea { 
+            width: 100%; height: 44px; font-size: 15px; border: 1px solid #c7c7cc; border-radius: 6px; background: #fff; padding: 0 10px; box-sizing: border-box; font-family: inherit; 
+        }
+        input:focus, select:focus, textarea:focus { border-color: #f39200; outline: none; background: #fffdf0; }
+        textarea { height: 70px; resize: none; padding-top:10px; }
+
+        .res-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; font-size: 14px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .res-row.dark { border-bottom-color: #333; }
+        .res-label { color: #555; flex: 0 0 auto; margin-right: 10px; }
+        .res-label.dark { color: #d1d1d6; }
+        .res-val { font-weight: bold; color: #000; text-align: right; }
+        .res-val.dark { color: #fff; }
+
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; color: white; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; transition: 0.2s; }
+        .btn-add { background: #005a9c; padding: 16px; font-size: 16px;}
+        .btn-add:disabled { background: #7f8c8d; cursor: not-allowed; }
+        .btn-send { background: #f39200; padding: 18px; font-size: 16px; }
+        .btn-pdf { background: #e74c3c; padding: 18px; font-size: 16px; }
+        .btn-reset { background: #7f8c8d; padding: 18px; font-size: 16px; }
+
+        .footer-box { background: white; padding: 15px; border-radius: 10px; border: 1px solid #d1d1d6; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 30px; }
+        
+        .print-only { display: none; }
+        @media print { 
+            .no-print { display: none !important; } 
+            .print-only { display: block !important; }
+            #app-container { display: block; padding: 0; } 
+            body { background: white; color: black; overflow: visible; }
+            .card { break-inside: avoid; border: 1px solid #000; box-shadow: none; margin-bottom: 15px; }
+        }
+        .dynamic-row { border: 1px solid #d1d1d6; background: #fff; padding: 12px; border-radius: 6px; margin-bottom: 15px; }
+        
+        .engine-breakdown { margin-top:15px; padding:10px; background:#f4f9ff; border:1px dashed #8e44ad; border-radius:6px; font-family:monospace; font-size:12px; color:#333; line-height:1.6;}
+        .engine-settings { background: #fffdf0; padding: 10px; border-radius: 6px; border: 1px solid #f39200; margin-top: 10px; font-size: 13px; }
+        .engine-settings label { font-weight:normal; margin-bottom:2px; color:#333;}
+        
+        /* Tabel Styles */
+        .kap-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; margin-top: 10px; }
+        .kap-table th, .kap-table td { padding: 6px 10px; border-bottom: 1px solid #ddd; }
+        .kap-table th { background-color: #f4f4f4; font-weight: bold; }
+    </style>
+</head>
+<body onload="initApp()">
+
+<div id="app-container">
+    <form id="orderForm" action="https://formspree.io/f/xkovrnqj" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_subject" id="mail_subject" value="Nieuwe Werkbon Sombre (Rolluiken/Screens)">
+        <textarea name="BESTEL_BON" id="mail_body" style="display:none;"></textarea>
+
+        <div class="no-print" style="text-align:center; background: white; border-radius: 8px; padding: 20px; border: 2px dashed #f39200; margin-bottom: 20px;">
+            <h1 style="margin:0 0 5px 0; color:#f39200; font-size:26px; text-transform: uppercase;">SOMBRE ZONWERING</h1>
+            <strong style="color:#2c3e50;">ROLLUIKEN & SCREENS CONFIGURATOR PRO</strong>
+        </div>
+
+        <!-- ================= STAP 1: KLANTGEGEVENS ================= -->
+        <div class="step-header no-print">Stap 1: Klant- & Projectgegevens</div>
+        <div class="dashboard-wrap no-print">
+            <div class="card" style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <div class="form-group"><label>Klantnaam / Project</label><input type="text" id="klant_naam" name="Klantnaam" required></div>
+                <div class="form-group"><label>Telefoonnummer</label><input type="tel" id="telefoon" name="Telefoon"></div>
+                <div style="display:flex; gap:10px;">
+                    <div class="form-group" style="flex:2;"><label>Postcode</label><input type="text" id="pc" name="Postcode" style="text-transform: uppercase;"></div>
+                    <div class="form-group" style="flex:1;"><label>Huisnr</label><input type="text" id="hn" name="Huisnummer"></div>
+                </div>
+                <div class="form-group"><label>Straat + Plaats</label><input type="text" id="str" name="Straat_Plaats" placeholder="Automatisch..."></div>
+                <div class="form-group"><label>E-mailadres Klant</label><input type="email" id="email" name="Email_Klant"></div>
+            </div>
+        </div>
+
+        <!-- ================= STAP 2: SYSTEEM & MATEN ================= -->
+        <div class="step-header no-print">Stap 2: Systeem & Dagmaat Configurator</div>
+        <div class="dashboard-wrap no-print">
+            
+            <!-- Systeem & Bak -->
+            <div class="card">
+                <div class="card-title">1️⃣ Systeem & Kapmaat</div>
+                
+                <div class="form-group">
+                    <label>Systeem Keuze</label>
+                    <select id="systeem" onchange="updateSysteemUI()">
+                        <optgroup label="Sombre (Eigen Merk) - Voordelig!">
+                            <option value="Sombre Rolluik" selected>Sombre Rolluik</option>
+                            <option value="Sombre Ritsscreen">Sombre Ritsscreen</option>
+                            <option value="Sombre Screen">Sombre Screen (Standaard)</option>
+                            <option value="Sombre Zonnescherm">Sombre Zonnescherm</option>
+                            <option value="Sombre Uitvalscherm">Sombre Uitvalscherm</option>
+                        </optgroup>
+                        <optgroup label="Heroal (A-Merk Aluminium)">
+                            <option value="Rolluik RS-38">Heroal Rolluik (RS-38)</option>
+                            <option value="Rolluik RS-38 Solar">Heroal Rolluik Solar (RS-38)</option>
+                            <option value="Zip-Screen 95">Heroal Zip-Screen 95</option>
+                            <option value="Zip-Screen 95 Solar">Heroal Zip-Screen 95 Solar</option>
+                            <option value="Zip-Screen 105">Heroal Zip-Screen 105</option>
+                            <option value="Zip-Screen 105 Solar">Heroal Zip-Screen 105 Solar</option>
+                            <option value="Zip-Screen 125">Heroal Zip-Screen 125 (Groot)</option>
+                            <option value="Zip-Screen 125 Solar">Heroal Zip-Screen 125 Solar</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div style="display:flex; gap:10px;" id="kastvorm_groep">
+                    <div class="form-group" style="flex:1;">
+                        <label>Vorm kast/bak</label>
+                        <select id="kastvorm"></select>
+                    </div>
+                    <div class="form-group" id="kapmaat_groep" style="flex:1;">
+                        <label>Kapmaat</label>
+                        <select id="kapmaat" onchange="triggerUpdate()"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Koppeling (Meerdere delen op 1 systeem)</label>
+                    <select id="koppeling"></select>
+                </div>
+
+                <div id="kapmaat_referentie" style="margin-top: 15px; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; display:none;">
+                    <div style="background: #2c3e50; color: white; padding: 6px 10px; font-weight: bold; font-size: 13px;">Richtlijnen Kapmaat Rolluiken</div>
+                    <table class="kap-table">
+                        <tr><th>Max. Hoogte (mm)</th><th>Aanbevolen Kap (mm)</th></tr>
+                        <tr><td>t/m 1200</td><td>137</td></tr>
+                        <tr><td>1201 - 1600</td><td>150</td></tr>
+                        <tr><td>1601 - 2400</td><td>165</td></tr>
+                        <tr><td>2401 - 2800</td><td>180</td></tr>
+                        <tr><td style="border-bottom: none;">2801 - 3400</td><td style="border-bottom: none;">205</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Maatvoering & Bestelmaat Engine -->
+            <div class="card card-calc" style="grid-column: span 2;">
+                <div class="card-title">📐 Dagmaat & Bestelmaat Engine 2.0</div>
+                
+                <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:250px;">
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label style="color:#005a9c;">Aantal Identieke Systemen</label>
+                            <input type="number" id="aantal" value="1" min="1" style="border-color:#005a9c; border-width:2px; font-weight:bold; font-size:18px;" onchange="triggerUpdate()">
+                        </div>
+                        <div class="form-group">
+                            <label>Dagmaat Breedte (Strakke maat in mm)</label>
+                            <input type="number" id="maat_b" min="1" placeholder="Bijv. 1548" oninput="autoSelectKap(); triggerUpdate();">
+                        </div>
+                        <div class="form-group">
+                            <label id="lbl_max_h">Dagmaat Hoogte (Strakke maat in mm)</label>
+                            <input type="number" id="maat_h" min="1" placeholder="Bijv. 2495" oninput="autoSelectKap(); triggerUpdate();">
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <div class="form-group" style="flex:1;"><label>Vrije Corr. Breedte (mm)</label><input type="number" id="corr_b" placeholder="0" oninput="triggerUpdate()"></div>
+                            <div class="form-group" style="flex:1;"><label>Vrije Corr. Hoogte (mm)</label><input type="number" id="corr_h" placeholder="0" oninput="triggerUpdate()"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="flex:1; min-width:300px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #d1d1d6;">
+                        <div class="form-group" id="montage_groep">
+                            <label style="color:#8e44ad; font-size:14px;">Kies Montagesituatie</label>
+                            <select id="montage_situatie" onchange="triggerUpdate()" style="border-color:#8e44ad; font-weight:bold;">
+                                <option value="IDD">In de dag (Volledig in de nis)</option>
+                                <option value="IDD_KAP">In de dag (Geleiders in nis, Kap OP de muur)</option>
+                                <option value="ODD" selected>Op de dag (Kap & Geleiders op de muur)</option>
+                                <option value="VRIJ">Vrije Invoer (Fabrieks-bestelmaat = Dagmaat)</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Variabele Speling & Oversteek Instellingen -->
+                        <div class="engine-settings" id="engine_settings_box">
+                            <div id="set_idd" style="display:none;">
+                                <label>Aftrek Breedte (speling in mm):</label>
+                                <input type="number" id="cfg_aftrek_b" value="5" oninput="triggerUpdate()" style="height:34px; margin-bottom:5px;">
+                            </div>
+                            <div id="set_odd" style="display:none;">
+                                <label>Extra speling/overlap Breedte (mm):</label>
+                                <input type="number" id="cfg_oversteek_b" value="5" oninput="triggerUpdate()" style="height:34px; margin-bottom:5px;">
+                                <label>Oversteek Hoogte onderkant (mm):</label>
+                                <input type="number" id="cfg_oversteek_h" value="20" oninput="triggerUpdate()" style="height:34px;">
+                            </div>
+                            <div id="set_verstek" style="margin-top:10px; border-top:1px solid #f39200; padding-top:10px; display:none;">
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                    <input type="checkbox" id="cfg_verstek" onchange="triggerUpdate()" style="width:20px; height:20px;">
+                                    Geleiders onder in verstek (+20mm hoogte)
+                                </label>
+                            </div>
+                            <div id="set_vb" style="margin-top:10px; border-top:1px solid #f39200; padding-top:10px; display:none;">
+                                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                    <input type="checkbox" id="cfg_vb_aftrek" onchange="triggerUpdate()" style="width:20px; height:20px;">
+                                    Dikte valse vensterbank aftrekken (-20mm)
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Visuele Rekenmachine -->
+                        <div class="engine-breakdown">
+                            <strong style="color:#8e44ad; font-size:14px; display:block; margin-bottom:5px; font-family:sans-serif;">Transparante Calculatie:</strong>
+                            <span id="calc_log_b" style="display:block; margin-bottom:3px;">Breedte: -</span>
+                            <span id="calc_log_h" style="display:block;">Hoogte: -</span>
+                            
+                            <div style="margin-top:10px; border-top:1px dashed #8e44ad; padding-top:10px; font-size:15px;">
+                                <span style="font-family:sans-serif;">Definitieve Fabrieksmaat:</span><br>
+                                <strong style="color:#8e44ad; font-size:18px;">Breedte: <span id="calc_bestel_b">-</span></strong><br>
+                                <strong style="color:#8e44ad; font-size:18px;">Hoogte: <span id="calc_bestel_h">-</span></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Geleiders & Motoren -->
+            <div class="card">
+                <div class="card-title">🔌 Motoren & Geleiders</div>
+                
+                <div class="form-group">
+                    <label>Type Aandrijving</label>
+                    <select id="motor" onchange="updateSysteemUI()"></select>
+                </div>
+                <div class="form-group">
+                    <label>Bedieningskant</label>
+                    <select id="motor_kant">
+                        <option value="Rechts">Rechts (buitenaf)</option>
+                        <option value="Links">Links (buitenaf)</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <div class="form-group" style="flex:1;">
+                        <label>Afstandsbediening (Zender)</label>
+                        <select id="zender"></select>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Snoerlengte</label>
+                        <select id="snoer">
+                            <option value="Standaard">Standaard snoer</option>
+                            <option value="Lang">10m Wit / 5m Zwart (+ € 28,00)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="geleiders_groep" style="border-top:1px solid #ddd; margin-top:5px; padding-top:10px;">
+                    <div style="display:flex; gap:10px;">
+                        <div class="form-group" style="flex:3;">
+                            <label>Geleider Links (buitenaf)</label>
+                            <select id="geleider_l" onchange="triggerUpdate()"></select>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Aantal (L) <span style="font-size:10px;color:#888;">(Uitvullen)</span></label>
+                            <input type="number" id="aantal_gel_l" value="1" min="1" onchange="triggerUpdate()">
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <div class="form-group" style="flex:3;">
+                            <label>Geleider Rechts (buitenaf)</label>
+                            <select id="geleider_r" onchange="triggerUpdate()"></select>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Aantal (R) <span style="font-size:10px;color:#888;">(Uitvullen)</span></label>
+                            <input type="number" id="aantal_gel_r" value="1" min="1" onchange="triggerUpdate()">
+                        </div>
+                    </div>
+                    <div class="form-group" id="boren_groep">
+                        <label>Gaten boren in geleiders af fabriek?</label>
+                        <select id="boren"><option value="Nee">Nee</option><option value="Ja">Ja (+ € 12,75 per systeem)</option></select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="border-top:1px solid #ddd; margin-top:10px; padding-top:10px;">
+                    <label>Smart Home Upgrade?</label>
+                    <select id="tahoma">
+                        <option value="Nee">Nee</option>
+                        <option value="Ja">Ja, Somfy Tahoma Switch toevoegen (+ € 169,00)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Kleuren & Afwerking -->
+            <div class="card">
+                <div class="card-title">🎨 Kleuren, Doek & Afwerking</div>
+                
+               <div class="form-group">
+                    <label>Kleur Kast & Geleiders</label>
+                    <select id="kleur_frame" onchange="triggerUpdate()">
+                        <option value="RAL 9016 (Zuiver wit)">RAL 9016 (Zuiver wit)</option>
+                        <option value="RAL 9001 (Crème wit)">RAL 9001 (Crème wit)</option>
+                        <option value="RAL 7038 (Grijs)">RAL 7038 (Grijs)</option>
+                        <option value="RAL 7016 (Antraciet)">RAL 7016 (Antraciet)</option>
+                        <option value="RAL 9005 (Gitzwart)*">RAL 9005 (Gitzwart)*</option>
+                        <option value="RAL 7021 (Zwartgrijs)*">RAL 7021 (Zwartgrijs)*</option>
+                        <option value="RAL 9010 (Wit)*">RAL 9010 (Wit)*</option>
+                        <option value="RAL 6009 (Groen)* (+8%)">RAL 6009 (Groen)* (+8%)</option>
+                        <option value="RAL 5011 (Blauw)* (+8%)">RAL 5011 (Blauw)* (+8%)</option>
+                        <option value="RAL 7039 (Kwartsgrijs)* (+8%)">RAL 7039 (Kwartsgrijs)* (+8%)</option>
+                        <option value="Afwijkende RAL">Afwijkende RAL-Kleur (Meerprijs)</option>
+                    </select>
+                    <span style="font-size:11px; color:#e74c3c; font-style:italic;">* Kleuren met een sterretje zijn niet leverbaar in kast 137 mm.</span>
+                </div>
+
+                <div class="form-group" id="kleur_lamel_groep">
+                    <label>Kleur Lamellen (Pantser)</label>
+                    <select id="kleur_lamel" onchange="triggerUpdate()">
+                        <option value="Zelfde als frame">Zelfde als framekleur</option>
+                        <option value="RAL 9016 (Zuiver wit)">RAL 9016 (Zuiver wit)</option>
+                        <option value="RAL 9001 (Crème wit)">RAL 9001 (Crème wit)</option>
+                        <option value="RAL 7038 (Grijs)">RAL 7038 (Grijs)</option>
+                        <option value="RAL 7016 (Antraciet)">RAL 7016 (Antraciet)</option>
+                        <option value="RAL 9005 (Gitzwart)">RAL 9005 (Gitzwart)</option>
+                        <option value="RAL 7021 (Zwartgrijs)">RAL 7021 (Zwartgrijs)</option>
+                        <option value="RAL 9010 (Wit)">RAL 9010 (Wit)</option>
+                        <option value="RAL 6009 (Groen) (+8%)">RAL 6009 (Groen) (+8%)</option>
+                        <option value="RAL 5011 (Blauw) (+8%)">RAL 5011 (Blauw) (+8%)</option>
+                        <option value="RAL 7039 (Kwartsgrijs) (+8%)">RAL 7039 (Kwartsgrijs) (+8%)</option>
+                        <option value="Zilver">Zilver / Geanodiseerd</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="kleur_doek_groep" style="display:none;">
+                    <label>Kleur & Type Doek</label>
+                    <select id="kleur_doek" onchange="checkEigenDoekKleur()">
+                        <!-- Wordt via JS gevuld -->
+                    </select>
+                </div>
+                
+                <div class="form-group" id="kleur_doek_eigen_groep" style="display:none;">
+                    <label>Vul eigen doek code / omschrijving in</label>
+                    <input type="text" id="kleur_doek_eigen" placeholder="Bijv. Dickson Orchestra 0001">
+                </div>
+
+                <div class="form-group" id="vensterbank_groep">
+                    <label>Valse Vensterbank (Onderprofiel)</label>
+                    <select id="valse_vensterbank" onchange="triggerUpdate()"><option value="Nee">Geen</option><option value="Ja 20x30">Ja, Hoekprofiel 20x30mm (+ € 20,00 p/m)</option><option value="Ja 20x70">Ja, Hoekprofiel 20x70mm (+ € 25,00 p/m)</option></select>
+                </div>
+                
+                <div class="form-group" id="vensterbank_kleur_groep" style="display:none;">
+                    <label>Kleur Valse Vensterbank</label>
+                    <input type="text" id="kleur_vensterbank" placeholder="Bijv. Zelfde als kast">
+                </div>
+
+                <div class="form-group" id="stapelprofiel_groep" style="display:none;">
+                    <label>Stapelprofiel 1cm (Onderzijde screen)</label>
+                    <select id="stapelprofiel"><option value="Nee">Geen</option><option value="Ja">Ja (+ € 25,00 p/m)</option></select>
+                </div>
+                
+                <div class="form-group" id="onderlijst_125_groep" style="display:none;">
+                    <label>Verzwaarde Onderlijst (Buis 100mm)</label>
+                    <select id="onderlijst_125"><option value="Nee">Nee</option><option value="Ja">Ja (+ € 79,00 p/m)</option></select>
+                </div>
+            </div>
+
+            <!-- Vrije Profielen Toevoegen -->
+            <div class="card card-item" style="border-color:#3498db;">
+                <div class="card-title" style="border-bottom-color:#3498db; color:#3498db;">📏 Losse Hoek- & Kokerprofielen</div>
+                <div id="profielenContainer"></div>
+                <button type="button" class="btn btn-add" style="background:#3498db; padding:10px; font-size:14px;" onclick="voegProfielToe()">+ PROFIEL TOEVOEGEN</button>
+                
+                <div class="form-group" style="margin-top:20px;">
+                    <label>Montagekosten Berekenen?</label>
+                    <select id="montage_keuze">
+                        <option value="Ja Rolluik" selected>Ja, montage Rolluik (€ 150,- p/st)</option>
+                        <option value="Ja Screen">Ja, montage Screen (€ 125,- p/st)</option>
+                        <option value="Ja Zonnescherm">Ja, montage Zonnescherm (€ 250,- p/st)</option>
+                        <option value="Ja Uitvalscherm">Ja, montage Uitvalscherm (€ 150,- p/st)</option>
+                        <option value="Nee">Nee, alleen leveren (zelfmontage)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Locatie / Notitie (Komt op offerte)</label>
+                    <input type="text" id="opmerking" placeholder="Bijv. Raam Slaapkamer 1 of Profiel t.b.v. Kozijn">
+                </div>
+            </div>
+
+            <!-- TOEVOEGEN & WINKELWAGEN -->
+            <div class="card card-item">
+                <div class="card-title">4️⃣ Bevestig Selectie</div>
+                <div style="font-size: 14px; margin-bottom:15px; color:#333; line-height: 1.5;" id="preview_tekst">
+                    Vul de afmetingen in om de prijs te bereken.
+                </div>
+                <p style="font-size:11px; color:#e74c3c; margin-bottom:15px; font-style:italic;">* Eventuele kortingen worden toegepast op het winkelwagentotaal, niet per item.</p>
+                <button type="button" id="btn_add_order" class="btn btn-add" onclick="voegToeAanOrder()">➕ VOEG TOE AAN WINKELWAGEN</button>
+            </div>
+
+            <div class="card card-cart" style="grid-column: 1 / -1;">
+                <div class="card-title">🛒 Uw Winkelwagen</div>
+                <div id="cart_items" style="min-height: 50px; margin-bottom: 15px; color:#666; font-size:14px; font-style:italic;">
+                    Winkelwagen is nog leeg...
+                </div>
+            </div>
+
+            <!-- TOTAAL OVERZICHT -->
+            <div class="card" style="background: #1c1c1e; border: 2px solid #000; grid-column: 1 / -1;">
+                <div class="step-header client" style="margin-top:0;">Stap 5: Investeringsoverzicht (Klant Weergave)</div>
+                <div class="res-row dark" style="margin-top:20px;"><span class="res-label dark">Systeem & Opties (Excl. Vaste Opties):</span><span class="res-val dark" id="prijs_basis">€ 0,00</span></div>
+                <div class="res-row dark" id="row_smart" style="display:none;"><span class="res-label dark">Smart Home / Motoren & Zenders:</span><span class="res-val dark" id="prijs_smart">€ 0,00</span></div>
+                <div class="res-row dark" id="row_profielen" style="display:none;"><span class="res-label dark">Losse Profielen / Hulpmateriaal:</span><span class="res-val dark" id="prijs_profielen">€ 0,00</span></div>
+                <div class="res-row dark"><span class="res-label dark">Montagekosten Totaal:</span><span class="res-val dark" id="prijs_montage">€ 0,00</span></div>
+                
+                <div class="res-row dark" style="margin-top: 20px; align-items: center; border-bottom: none;">
+                    <span class="res-label dark" style="color: #f39200;">Persoonlijke Korting (Procent %):</span>
+                    <div style="display:flex; align-items:center;">
+                        <input type="number" id="korting_percentage" placeholder="0" min="0" max="100" style="width: 80px; background: #333; color: #fff; border: 1px solid #555; text-align: right; font-weight: bold; font-size: 16px;">
+                        <span style="color:#fff; font-size:18px; margin-left:8px;">%</span>
+                    </div>
+                </div>
+                <div class="res-row dark" id="korting_weergave_rij" style="display:none; border-bottom: none;">
+                    <span class="res-label dark" style="color: #e74c3c;">Korting in Euro's:</span>
+                    <span class="res-val dark" id="korting_bedrag_euro" style="color: #e74c3c;">- € 0,00</span>
+                </div>
+
+                <div class="res-row dark" style="margin-top:15px; border-top: 2px solid #34c759; padding-top: 15px; border-bottom: none;">
+                    <span class="res-label dark" style="font-size:18px; color:#fff;">ORDER TOTAAL (INCL. 21% BTW):</span>
+                    <span class="res-val dark" id="prijs_totaal" style="font-size: 26px; color: #34c759;">€ 0,00</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-box no-print">
+            <button type="submit" class="btn btn-send" id="btnSend">📩 VERZEND OFFERTE / WERKBON</button>
+            <button type="button" class="btn btn-pdf" onclick="window.print()">🖨️ PRINT BESTELBON</button>
+            <button type="button" class="btn btn-reset" onclick="wisAlles()">🔄 ALLES WISSEN</button>
+        </div>
+        
+        <!-- PRINT AREA (INTERNE WERKBON) -->
+        <div class="print-only" id="print_area">
+            <h1 style="color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom:10px;">INTERNE WERKBON & BESTELLIJST (ROLLUIKEN/SCREENS)</h1>
+            <p style="color: #e74c3c; font-weight:bold; font-size: 16px;">LET OP: ONDERSTAANDE INTERNE SPECIFICATIES BEVATTEN INKOOPPRIJZEN EXCL. BTW.</p>
+            <div id="print_klantgegevens" style="margin-bottom: 20px; font-size: 14px; line-height: 1.6;"></div>
+            <pre id="print_inkoop_specificatie" style="font-family: monospace; font-size:13px; background:#f4f4f4; padding:15px; border:1px solid #ddd; white-space: pre-wrap;"></pre>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    // ============================================================================
+    // 1. REKEN INSTELLINGEN & FACTOREN 
+    // ============================================================================
+    const VERKOOP_FACTOR_SOMBRE = 1.9; 
+    const HEROAL_INKOOP_FACTOR = 0.60; 
+
+    function formatBedrag(bedrag) {
+        return "€ " + parseFloat(bedrag).toLocaleString('nl-NL', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    window.winkelwagen = [];
+    window.huidigeSubtotaal = 0; 
+    window.inkoopSpecificatieTekst = "";
+    window.profielenTeller = 0;
+
+    const GELEIDER_BREEDTES = {
+        "HTF 53": 53, "LHTF 53": 53, "HF 45": 45, "LHF 45": 45,
+        "FHTF-12": 53, "FHTF-20": 53, "HTF 30x28": 30, "LHTF 32x30": 32,
+        "Standaard Geleider (Breedte: 37,5 mm)": 37.5, "Klikgeleider (Standaard)": 37.5, 
+        "Patio": 37.5, "Opvul": 37.5, "Inbouw": 37.5
+    };
+
+    const PROFIEL_PRIJZEN = {
+        "Hoekprofiel 20x30x2 mm": 20.13,
+        "Hoekprofiel 20x40x2 mm": 24.33,
+        "Hoekprofiel 40x40x2 mm": 28.62,
+        "Hoekprofiel 20x70x2 mm": 30.75,
+        "Kokerprofiel 20x40x3 mm": 43.45,
+        "Kokerprofiel 30x40x3 mm": 46.63
+    };
+    const RAL_KLEUREN_PROFIEL = ["RAL 7016", "RAL 9016", "RAL 9001", "RAL 9010", "RAL 9005", "RAL 5011", "Eigen Kleur (Invullen)"];
+
+    // ============================================================================
+    // 2. MATRICES (Onafgebroken gelaten voor de correcte logica)
+    // ============================================================================
+    const GRID_HEROAL_RS38_SOLAR_INKOOP_EX = [
+        { h: 1000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [578.75, 592.19, 605.63, 619.06, 632.50, 645.94, 659.38, 672.82, 686.25, 699.69, 713.13, 746.72, 780.32] },
+        { h: 1200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [592.19, 608.31, 624.44, 640.57, 656.69, 672.82, 688.94, 705.07, 721.19, 737.32, 753.44, 793.75, 834.07] },
+        { h: 1400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [605.63, 624.44, 643.25, 662.07, 680.88, 699.69, 718.50, 737.32, 756.13, 774.94, 793.75, 840.79, 887.82] },
+        { h: 1600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [619.06, 640.57, 662.07, 683.57, 705.07, 726.57, 748.07, 769.57, 791.07, 812.57, 834.07, 887.82, 941.57] },
+        { h: 1800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [632.50, 656.69, 680.88, 705.07, 729.25, 753.44, 777.63, 801.82, 826.00, 850.19, 874.38, 934.85, 995.32] },
+        { h: 2000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [645.94, 672.82, 699.69, 726.57, 753.44, 780.32, 807.19, 834.07, 860.94, 887.82, 914.69, 981.88, 1049.07] },
+        { h: 2200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [659.38, 688.94, 718.50, 748.07, 777.63, 807.19, 836.75, 866.32, 895.88, 925.44, 955.00, 1028.91, 1102.82] },
+        { h: 2400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [672.82, 705.07, 737.32, 769.57, 801.82, 834.07, 866.32, 898.57, 930.82, 963.07, 995.32, 1075.94, 1156.57] },
+        { h: 2600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [686.25, 721.19, 756.13, 791.07, 826.00, 860.94, 895.88, 930.82, 965.76, 1000.69, 1035.63, 1122.97, 1210.32] },
+        { h: 2800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [699.69, 737.32, 774.94, 812.57, 850.19, 887.82, 925.44, 963.07, 1000.69, 1038.32, 1075.94, 1170.01, 1264.07] },
+        { h: 3000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [713.13, 753.44, 793.75, 834.07, 874.38, 914.69, 955.00, 995.32, 1035.63, 1075.94, 1116.26, 1217.04, 1317.82] }
+    ];
+
+    const GRID_HEROAL_RS38_SOLAR_VERKOOP_INCL = [
+        { h: 1000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1015.42, 1039.00, 1062.57, 1086.15, 1109.72, 1133.30, 1156.88, 1180.45, 1204.03, 1227.60, 1251.18, 1310.12, 1369.06] },
+        { h: 1200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1039.00, 1067.29, 1095.58, 1123.87, 1152.16, 1180.45, 1208.74, 1237.03, 1265.33, 1293.62, 1321.91, 1392.64, 1463.36] },
+        { h: 1400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1062.57, 1095.58, 1128.58, 1161.59, 1194.60, 1227.60, 1260.61, 1293.62, 1326.62, 1359.63, 1392.64, 1475.15, 1557.67] },
+        { h: 1600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1086.15, 1123.87, 1161.59, 1199.31, 1237.03, 1274.76, 1312.48, 1350.20, 1387.92, 1425.64, 1463.36, 1557.67, 1651.97] },
+        { h: 1800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1109.72, 1152.16, 1194.60, 1237.03, 1279.47, 1321.91, 1364.34, 1406.78, 1449.22, 1491.66, 1534.09, 1640.18, 1746.28] },
+        { h: 2000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1133.30, 1180.45, 1227.60, 1274.76, 1321.91, 1369.06, 1416.21, 1463.36, 1510.52, 1557.67, 1604.82, 1722.70, 1840.58] },
+        { h: 2200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1156.88, 1208.74, 1260.61, 1312.48, 1364.34, 1416.21, 1468.08, 1519.95, 1571.81, 1623.68, 1675.55, 1805.22, 1934.88] },
+        { h: 2400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1180.45, 1237.03, 1293.62, 1350.20, 1406.78, 1463.36, 1519.95, 1576.53, 1633.11, 1689.69, 1746.28, 1887.73, 2029.19] },
+        { h: 2600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1204.03, 1265.33, 1326.62, 1387.92, 1449.22, 1510.52, 1571.81, 1633.11, 1694.41, 1755.71, 1817.00, 1970.25, 2123.49] },
+        { h: 2800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1227.60, 1293.62, 1359.63, 1425.64, 1491.66, 1557.67, 1623.68, 1689.69, 1755.71, 1821.72, 1887.73, 2052.76, 2217.80] },
+        { h: 3000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [1251.18, 1321.91, 1392.64, 1463.36, 1534.09, 1604.82, 1675.55, 1746.28, 1817.00, 1887.73, 1958.46, 2135.28, 2312.10] }
+    ];
+
+    const GRID_HEROAL_RS38_INKOOP_EX = [
+        { h: 1000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [331.25, 344.44, 357.63, 370.81, 384.00, 397.19, 410.38, 423.57, 436.75, 449.94, 463.13, 496.10, 529.07] },
+        { h: 1200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [344.44, 360.26, 376.09, 391.91, 407.74, 423.57, 439.39, 455.22, 471.04, 486.87, 502.69, 542.26, 581.82] },
+        { h: 1400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [357.63, 376.09, 394.55, 413.02, 431.48, 449.94, 468.41, 486.87, 505.33, 523.79, 542.26, 588.42, 634.57] },
+        { h: 1600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [370.81, 391.91, 413.02, 434.12, 455.22, 476.32, 497.42, 518.52, 539.62, 560.72, 581.82, 634.57, 687.33] },
+        { h: 1800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [384.00, 407.74, 431.48, 455.22, 478.96, 502.69, 526.43, 550.17, 573.91, 597.65, 621.39, 680.73, 740.08] },
+        { h: 2000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [397.19, 423.57, 449.94, 476.32, 502.69, 529.07, 555.45, 581.82, 608.20, 634.57, 660.95, 726.89, 792.83] },
+        { h: 2200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [410.38, 439.39, 468.41, 497.42, 526.43, 555.45, 584.46, 613.47, 642.49, 671.50, 700.51, 773.05, 845.58] },
+        { h: 2400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [423.57, 455.22, 486.87, 518.52, 550.17, 581.82, 613.47, 645.12, 676.78, 708.43, 740.08, 819.21, 898.33] },
+        { h: 2600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [436.75, 471.04, 505.33, 539.62, 573.91, 608.20, 642.49, 676.78, 711.06, 745.35, 779.64, 865.36, 951.09] },
+        { h: 2800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [449.94, 486.87, 523.79, 560.72, 597.65, 634.57, 671.50, 708.43, 745.35, 782.28, 819.21, 911.52, 1003.84] },
+        { h: 3000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [463.13, 502.69, 542.26, 581.82, 621.39, 660.95, 700.51, 740.08, 779.64, 819.21, 858.77, 957.68, 1056.59] }
+    ];
+
+    const GRID_HEROAL_RS38_VERKOOP_INCL = [
+        { h: 1000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [688.00, 705.80, 723.59, 741.39, 759.18, 776.98, 794.78, 812.57, 830.37, 848.16, 865.96, 910.45, 954.94] },
+        { h: 1200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [705.80, 727.15, 748.51, 769.86, 791.22, 812.57, 833.93, 855.28, 876.64, 897.99, 919.35, 972.74, 1026.12] },
+        { h: 1400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [723.59, 748.51, 773.42, 798.34, 823.25, 848.16, 873.08, 897.99, 922.91, 947.82, 972.74, 1035.02, 1097.31] },
+        { h: 1600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [741.39, 769.86, 798.34, 826.81, 855.28, 883.76, 912.23, 940.70, 969.18, 997.65, 1026.12, 1097.31, 1168.49] },
+        { h: 1800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [759.18, 791.22, 823.25, 855.28, 887.32, 919.35, 951.38, 983.41, 1015.45, 1047.48, 1079.51, 1159.59, 1239.68] },
+        { h: 2000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [776.98, 812.57, 848.16, 883.76, 919.35, 954.94, 990.53, 1026.12, 1061.72, 1097.31, 1132.90, 1221.88, 1310.86] },
+        { h: 2200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [794.78, 833.93, 873.08, 912.23, 951.38, 990.53, 1029.68, 1068.83, 1107.99, 1147.14, 1186.29, 1284.17, 1382.04] },
+        { h: 2400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [812.57, 855.28, 897.99, 940.70, 983.41, 1026.12, 1068.83, 1111.54, 1154.26, 1196.97, 1239.68, 1346.45, 1453.23] },
+        { h: 2600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [830.37, 876.64, 922.91, 969.18, 1015.45, 1061.72, 1107.99, 1154.26, 1200.52, 1246.79, 1293.06, 1408.74, 1524.41] },
+        { h: 2800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [848.16, 897.99, 947.82, 997.65, 1047.48, 1097.31, 1147.14, 1196.97, 1246.79, 1296.62, 1346.45, 1471.02, 1595.60] },
+        { h: 3000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500, 4000], p: [865.96, 919.35, 972.74, 1026.12, 1079.51, 1132.90, 1186.29, 1239.68, 1293.06, 1346.45, 1399.84, 1533.31, 1666.78] }
+    ];
+
+    const GRID_ZIP95_SOLAR = [
+        { h: 1000, w: [1000, 1500, 2000, 2500, 3000, 4000], p: [1052.70, 1151.39, 1212.80, 1260.00, 1502.29, 1700.00] },
+        { h: 1500, w: [1000, 1500, 2000, 2500, 3000, 4000], p: [1160.16, 1225.00, 1285.00, 1336.00, 1580.00, 1780.00] },
+        { h: 2000, w: [1000, 1500, 2000, 2500, 3000, 4000], p: [1265.45, 1315.00, 1360.00, 1427.00, 1680.00, 1880.00] },
+        { h: 2500, w: [1000, 1500, 2000, 2500, 3000, 4000], p: [1360.00, 1420.00, 1480.00, 1540.00, 1790.00, 1990.00] },
+        { h: 3000, w: [1000, 1500, 2000, 2500, 3000, 4000], p: [1460.00, 1520.00, 1590.00, 1660.00, 1910.00, 2100.00] },
+        { h: 4000, w: [1000, 1500, 2000, 2500, 3000, 4000], p: [1660.00, 1720.00, 1810.00, 1900.00, 2150.00, 2350.00] }
+    ];
+    const GRID_ZIP95 = GRID_ZIP95_SOLAR.map(row => ({ h: row.h, w: row.w, p: row.p.map(price => price - 350) }));
+    const GRID_ZIP105_SOLAR = GRID_ZIP95_SOLAR.map(row => ({ h: row.h, w: row.w, p: row.p.map(price => price + 150) }));
+    const GRID_ZIP105 = GRID_ZIP105_SOLAR.map(row => ({ h: row.h, w: row.w, p: row.p.map(price => price - 350) }));
+    const GRID_ZIP125_SOLAR = GRID_ZIP95_SOLAR.map(row => ({ h: row.h, w: row.w, p: row.p.map(price => price + 275) }));
+    const GRID_ZIP125 = GRID_ZIP125_SOLAR.map(row => ({ h: row.h, w: row.w, p: row.p.map(price => price - 350) }));
+
+    const GRID_SOMBRE_ROLLUIK = [
+        { h: 1000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [128, 144, 161, 176, 193, 208, 226, 241, 258, 290, 273, 306, 339, 321, 354] },
+        { h: 1200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [141, 161, 176, 197, 212, 233, 248, 266, 286, 303, 321, 359, 393, 357, 574] },
+        { h: 1400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [157, 176, 197, 219, 237, 258, 277, 296, 319, 339, 357, 378, 400, 457, 478] },
+        { h: 1600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [170, 193, 214, 255, 258, 279, 303, 325, 345, 390, 368, 451, 474, 494, 515] },
+        { h: 1800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [185, 210, 255, 262, 284, 308, 332, 357, 381, 470, 445, 492, 562, 540, 515] },
+        { h: 2000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [202, 227, 253, 278, 305, 329, 355, 380, 457, 507, 482, 534, 558, 586, 611] },
+        { h: 2200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [233, 262, 286, 315, 345, 371, 400, 451, 478, 534, 507, 560, 588, 615, 642] },
+        { h: 2400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [258, 286, 318, 349, 378, 407, 466, 496, 527, 556, 588, 619, 646, 679, 711] },
+        { h: 2600, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [273, 308, 342, 378, 412, 457, 490, 521, 554, 586, 619, 652, 688, 757, 720] },
+        { h: 2800, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [286, 321, 357, 393, 447, 480, 513, 548, 582, 615, 650, 685, 720, 757, 795] },
+        { h: 3000, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [300, 335, 374, 412, 452, 488, 538, 574, 609, 644, 681, 717, 757, 791, 831] },
+        { h: 3200, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [308, 352, 390, 431, 468, 519, 558, 594, 631, 670, 708, 751, 789, 826, 866] },
+        { h: 3400, w: [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800], p: [321, 365, 407, 448, 503, 542, 582, 621, 660, 698, 737, 780, 820, 862, 904] }
+    ];
+
+    const GRID_SOMBRE_SCREEN_RITS = [
+        {"h": 1000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [231, 249, 256, 266, 284, 321, 302, 339, 361, 378, 396, 415, 433, 515, 534, 557, 579, 600]}, 
+        {"h": 1200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [238, 254, 263, 286, 306, 346, 325, 366, 387, 405, 426, 447, 467, 550, 575, 596, 619, 641]}, 
+        {"h": 1400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [244, 261, 281, 306, 325, 371, 348, 391, 415, 435, 458, 480, 502, 587, 612, 634, 659, 683]}, 
+        {"h": 1600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [254, 279, 302, 325, 348, 396, 371, 417, 442, 465, 488, 513, 536, 621, 649, 674, 701, 726]}, 
+        {"h": 1800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [268, 293, 318, 346, 368, 393, 421, 442, 470, 495, 520, 547, 570, 659, 685, 713, 740, 768]}, 
+        {"h": 2000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [284, 311, 336, 366, 391, 415, 442, 470, 497, 525, 550, 579, 604, 694, 724, 753, 783, 811]}, 
+        {"h": 2200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [298, 328, 355, 385, 412, 440, 467, 495, 527, 554, 582, 612, 639, 731, 761, 790, 823, 852]}, 
+        {"h": 2400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [314, 346, 375, 405, 433, 492, 463, 522, 554, 582, 612, 644, 674, 765, 798, 830, 862, 894]}, 
+        {"h": 2600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [336, 371, 403, 438, 470, 502, 534, 566, 602, 634, 666, 701, 733, 830, 864, 902, 937, 974]}, 
+        {"h": 2800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [353, 367, 421, 458, 490, 559, 525, 596, 629, 664, 699, 753, 768, 864, 902, 939, 979, 1017]}, 
+        {"h": 3000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [368, 403, 438, 477, 513, 584, 547, 619, 659, 694, 728, 768, 802, 902, 942, 979, 1019, 1059]}, 
+        {"h": 3200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [383, 421, 458, 497, 534, 609, 572, 646, 685, 724, 761, 800, 838, 937, 979, 1019, 1059, 1100]}, 
+        {"h": 3400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [398, 438, 474, 517, 554, 594, 634, 671, 713, 753, 790, 832, 870, 974, 1017, 1059, 1100, 1143]}, 
+        {"h": 3600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [423, 467, 510, 557, 600, 689, 644, 731, 778, 820, 862, 910, 951, 1009, 1054, 1096, 1141, 1185]}, 
+        {"h": 3800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [436, 485, 529, 577, 621, 666, 713, 758, 805, 850, 894, 942, 987, 1047, 1091, 1136, 1183, 1228]}, 
+        {"h": 4000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [453, 500, 547, 596, 644, 738, 689, 783, 832, 880, 924, 974, 1022, 1081, 1128, 1175, 1222, 1270]}, 
+        {"h": 4200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [467, 517, 564, 616, 664, 713, 763, 811, 860, 910, 957, 1009, 1056, 1118]}, 
+        {"h": 4400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [483, 534, 584, 637, 685, 788, 736, 834, 889, 939, 989, 1041, 1091, 1153]}, 
+        {"h": 4600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [497, 552, 602, 656, 708, 758, 811, 862, 917, 969, 1019, 1073, 1125, 1190]}, 
+        {"h": 4800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [513, 566, 621, 676, 728, 783, 834, 889, 944, 997, 1051, 1106, 1160, 1226]}, 
+        {"h": 5000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [527, 584, 639, 696, 751, 860, 805, 914, 972, 1026, 1081, 1141, 1192, 1262]}, 
+        {"h": 5200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [542, 602, 656, 715, 773, 885, 827, 942, 1001, 1056, 1113, 1173, 1228, 1299]}, 
+        {"h": 5400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [557, 616, 676, 736, 793, 850, 910, 969, 1029, 1086, 1146, 1205, 1262, 1334]}, 
+        {"h": 5600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400], "p": [575, 634, 694, 756, 815, 875, 935, 996, 1056, 1116, 1175, 1237]}, 
+        {"h": 5800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400], "p": [589, 651, 711, 775, 838, 960, 898, 1022, 1086, 1146, 1208]}, 
+        {"h": 6000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400], "p": [604, 666, 751, 795, 857, 984, 919, 1047, 1113, 1175]}
+    ];
+
+    const GRID_SOMBRE_SCREEN = [
+        {"h": 1000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [190, 197, 207, 217, 232, 247, 262, 279, 294, 309, 324, 341, 356, 385, 400, 417, 432, 450]}, 
+        {"h": 1200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [195, 207, 215, 232, 249, 284, 267, 299, 317, 334, 351, 369, 386, 415, 432, 452, 469, 487]}, 
+        {"h": 1400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [200, 215, 227, 247, 264, 304, 284, 321, 341, 359, 379, 396, 416, 447, 467, 487, 504, 524]}, 
+        {"h": 1600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [205, 222, 242, 262, 282, 324, 502, 344, 364, 384, 403, 426, 446, 477, 499, 519, 541, 561]}, 
+        {"h": 1800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [212, 235, 254, 277, 299, 344, 321, 364, 366, 408, 431, 453, 505, 509, 531, 554, 576, 601]}, 
+        {"h": 2000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [222, 247, 269, 292, 317, 364, 339, 386, 411, 433, 458, 510, 535, 539, 564, 589, 613, 638]}, 
+        {"h": 2200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [232, 257, 282, 309, 334, 359, 384, 408, 433, 488, 513, 538, 565, 571, 596, 623, 648, 676]}, 
+        {"h": 2400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [244, 269, 297, 324, 349, 403, 376, 431, 485, 513, 540, 567, 595, 601, 631, 658, 685, 713]}, 
+        {"h": 2600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [262, 292, 321, 351, 381, 441, 411, 500, 530, 560, 590, 620, 649, 661, 693, 723, 755, 785]}, 
+        {"h": 2800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [272, 304, 334, 366, 398, 490, 428, 520, 552, 585, 617, 647, 679, 693, 725, 757, 790, 822]}, 
+        {"h": 3000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [282, 317, 349, 381, 416, 448, 510, 543, 575, 610, 642, 677, 709, 723, 757, 792, 827, 862]}, 
+        {"h": 3200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [319, 351, 386, 418, 453, 520, 488, 555, 587, 622, 657, 689, 724, 755, 790, 827, 862, 899]}, 
+        {"h": 3400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [329, 364, 398, 456, 470, 505, 540, 575, 612, 647, 682, 716, 754, 785, 825, 862, 899, 936]}, 
+        {"h": 3600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [359, 398, 438, 478, 518, 597, 557, 639, 679, 731, 756, 798, 836, 817, 857, 897, 934, 974]}, 
+        {"h": 3800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [313, 355, 392, 437, 477, 517, 556, 596, 641, 681, 720, 762, 802, 849, 889, 929, 971, 1011]}, 
+        {"h": 4000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200, 4400], "p": [323, 365, 407, 452, 492, 534, 576, 618, 663, 705, 745, 790, 832, 879, 921, 964, 1006, 1048]}, 
+        {"h": 4200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [333, 578, 420, 467, 509, 500, 554, 641, 685, 730, 772, 820, 862, 911]}, 
+        {"h": 4400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [343, 390, 435, 482, 527, 618, 571, 663, 710, 755, 800, 847, 892, 944]}, 
+        {"h": 4600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [353, 400, 447, 497, 544, 638, 589, 685, 733, 780, 827, 874, 921, 974]}, 
+        {"h": 4800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [363, 412, 462, 512, 559, 608, 658, 705, 757, 805, 852, 904, 951, 1006]}, 
+        {"h": 5000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [375, 425, 474, 527, 576, 678, 626, 728, 780, 830, 879, 931, 981, 1038]}, 
+        {"h": 5200, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [385, 437, 487, 541, 594, 698, 646, 748, 802, 854, 907, 959, 1011, 1068]}, 
+        {"h": 5400, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600], "p": [395, 450, 502, 556, 611, 665, 718, 770, 827, 879, 931, 988, 1041, 1100]}, 
+        {"h": 5600, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400], "p": [405, 459, 514, 571, 626, 738, 681, 792, 849, 904, 959, 1016]}, 
+        {"h": 5800, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400], "p": [415, 472, 529, 589, 643, 700, 757, 815, 872, 929, 986]}, 
+        {"h": 6000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400], "p": [425, 484, 541, 608, 661, 718, 777, 836, 897, 954]}
+    ];
+
+    const GRID_SOMBRE_ZONNESCHERM = [
+        {"h": 2000, "w": [3000, 3500, 4000, 4500, 5000, 5500, 6000], "p": [1029, 1069, 1153, 1240, 1327, 1414, 1501]}, 
+        {"h": 2500, "w": [3000, 3500, 4000, 4500, 5000, 5500, 6000], "p": [1051, 1090, 1175, 1262, 1349, 1436, 1522]}, 
+        {"h": 3000, "w": [3000, 3500, 4000, 4500, 5000, 5500, 6000], "p": [1051, 1172, 1264, 1356, 1450, 1542, 1634]}
+    ];
+
+    const GRID_SOMBRE_UITVALSCHERM = [
+        {"h": 900, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000], "p": [333, 350, 365, 382, 397, 415, 430, 447, 462, 479, 499, 517, 531, 549, 564, 586]}, 
+        {"h": 1000, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000], "p": [348, 365, 380, 397, 415, 432, 450, 467, 484, 502, 524, 541, 559, 576, 594, 616]}, 
+        {"h": 1150, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000], "p": [363, 382, 400, 417, 435, 454, 472, 489, 507, 527, 549, 566, 586, 604, 621, 646]}, 
+        {"h": 1350, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000], "p": [395, 417, 440, 462, 482, 504, 527, 546, 569, 591, 616, 638, 661, 683, 703, 750]}, 
+        {"h": 1500, "w": [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000], "p": [410, 430, 452, 474, 494, 517, 539, 559, 581, 604, 631, 651, 673, 695, 715, 743]}
+    ];
+
+    // ============================================================================
+    // 4. BEREKENING OP DE MILLIMETER (Bilineaire Interpolatie)
+    // ============================================================================
+    function getGridPriceBilinear(grid, b, h) {
+        let row1, row2;
+        for (let i = 0; i < grid.length; i++) {
+            if (h <= grid[i].h) {
+                row2 = grid[i]; row1 = i > 0 ? grid[i-1] : grid[i]; break;
+            }
+        }
+        if (!row2) { row2 = grid[grid.length - 1]; row1 = row2; }
+
+        let col1_idx = 0, col2_idx = 0;
+        for (let j = 0; j < row2.w.length; j++) {
+            if (b <= row2.w[j]) {
+                col2_idx = j; col1_idx = j > 0 ? j - 1 : j; break;
+            }
+        }
+        if (b > row2.w[row2.w.length - 1]) { col2_idx = row2.w.length - 1; col1_idx = col2_idx; }
+
+        let h1 = row1.h, h2 = row2.h;
+        let w1 = row2.w[col1_idx], w2 = row2.w[col2_idx];
+
+        let p11 = row1.p[col1_idx], p12 = row1.p[col2_idx];
+        let p21 = row2.p[col1_idx], p22 = row2.p[col2_idx];
+
+        let x_frac = (w2 === w1) ? 0 : (b - w1) / (w2 - w1);
+        let y_frac = (h2 === h1) ? 0 : (h - h1) / (h2 - h1);
+        
+        x_frac = Math.max(0, Math.min(1, x_frac));
+        y_frac = Math.max(0, Math.min(1, y_frac));
+
+        let interp_top = p11 + x_frac * (p12 - p11);
+        let interp_bottom = p21 + x_frac * (p22 - p21);
+        return interp_top + y_frac * (interp_bottom - interp_top);
+    }
+
+    // ============================================================================
+    // 5. UI INITIALISATIE & UPDATES
+    // ============================================================================
+    function initApp() {
+        updateSysteemUI();
+        renderWinkelwagen();
+    }
+
+    function triggerUpdate() {
+        updateBestelmaat();
+    }
+
+    function autoSelectKap() {
+        var hIn = parseInt(document.getElementById('maat_h').value) || 0;
+        var bIn = parseInt(document.getElementById('maat_b').value) || 0;
+        var sys = document.getElementById('systeem').value;
+        var isRolluik = sys.includes("Rolluik");
+        var isZip = sys === "Sombre Ritsscreen" || sys.includes("Zip-Screen");
+        var isStandaardScreen = sys === "Sombre Screen";
+        var isSombre = sys.includes("Sombre");
+        var kapSelect = document.getElementById('kapmaat');
+        
+        let benodigd = "";
+
+        if (isRolluik) {
+            // Updated according to the visual matrix for exact Kapmaat thresholds
+            if (hIn <= 1200) benodigd = "137";
+            else if (hIn <= 1600) benodigd = "150";
+            else if (hIn <= 2400) benodigd = "165";
+            else if (hIn <= 2800) benodigd = "180";
+            else benodigd = "205";
+        } else if (isSombre && (isZip || isStandaardScreen)) {
+            if (hIn > 3000 || bIn > 3400) benodigd = "112.5";
+            else benodigd = "92.5";
+        }
+
+        if (benodigd !== "") {
+            let benodigdVal = parseFloat(benodigd) || 0;
+            let optionExists = Array.from(kapSelect.options).some(opt => parseFloat(opt.value) === benodigdVal);
+            if (optionExists) {
+                kapSelect.value = Array.from(kapSelect.options).find(opt => parseFloat(opt.value) === benodigdVal).value;
+            }
+        }
+    }
+
+    function updateSysteemUI() {
+        var sys = document.getElementById('systeem').value;
+        var isRolluik = sys.includes("Rolluik");
+        var isSolar = sys.includes("Solar");
+        var isZip = sys === "Sombre Ritsscreen" || sys.includes("Zip-Screen"); 
+        var isStandaardScreen = sys === "Sombre Screen";
+        var isZip125 = sys.includes("125");
+        var isSombre = sys.includes("Sombre");
+        var isZonnescherm = sys.includes("Zonnescherm");
+        var isUitvalscherm = sys.includes("Uitvalscherm");
+
+        document.getElementById('kleur_lamel_groep').style.display = isRolluik ? 'block' : 'none';
+        document.getElementById('vensterbank_groep').style.display = isRolluik ? 'block' : 'none';
+        document.getElementById('kastvorm_groep').style.display = (isZonnescherm || isUitvalscherm) ? 'none' : 'flex';
+        document.getElementById('stapelprofiel_groep').style.display = isZip ? 'block' : 'none';
+        document.getElementById('onderlijst_125_groep').style.display = isZip125 ? 'block' : 'none';
+        document.getElementById('geleiders_groep').style.display = (isZonnescherm || isUitvalscherm) ? 'none' : 'block';
+        document.getElementById('kapmaat_referentie').style.display = isRolluik ? 'block' : 'none';
+
+        let vbSelect = document.getElementById('valse_vensterbank').value;
+        document.getElementById('vensterbank_kleur_groep').style.display = (isRolluik && vbSelect !== "Nee") ? 'block' : 'none';
+
+        document.getElementById('lbl_max_h').innerText = (isZonnescherm || isUitvalscherm) ? "Max Uitval (Strakke maat in mm)" : "Dagmaat Hoogte (Strakke maat in mm)";
+
+        let montageSelect = document.getElementById('montage_situatie');
+        let huidigMontage = montageSelect.value;
+        if (isZonnescherm || isUitvalscherm) {
+            montageSelect.innerHTML = `<option value="VRIJ" selected>Vrije Invoer (Fabrieks-Bestelmaat)</option>`;
+        } else {
+            montageSelect.innerHTML = `
+                <option value="IDD">In de dag (Volledig in de nis)</option>
+                <option value="IDD_KAP">In de dag (Geleiders in nis, Kap OP de muur)</option>
+                <option value="ODD">Op de dag (Kap & Geleiders op de muur)</option>
+                <option value="VRIJ">Vrije Invoer (Ik vul zelf fabrieks-bestelmaat in)</option>
+            `;
+            if(huidigMontage) montageSelect.value = huidigMontage;
+            if(!montageSelect.value) montageSelect.value = "ODD";
+        }
+
+        if (isRolluik) document.getElementById('montage_keuze').value = "Ja Rolluik";
+        else if (isZonnescherm) document.getElementById('montage_keuze').value = "Ja Zonnescherm";
+        else if (isUitvalscherm) document.getElementById('montage_keuze').value = "Ja Uitvalscherm";
+        else document.getElementById('montage_keuze').value = "Ja Screen";
+
+        let doekSelect = document.getElementById('kleur_doek');
+        if (isZonnescherm || isUitvalscherm) {
+            doekSelect.innerHTML = `<option value="Standaard Collectie">Sombre Standaard Collectie (Inbegrepen)</option><option value="Dickson / Swela / Sattler">Dickson / Swela / Sattler (+ € 17,00 p/m²)</option>`;
+            document.getElementById('kleur_doek_groep').style.display = 'block';
+        } else if (isZip || isStandaardScreen || sys.includes("Screen")) {
+            doekSelect.innerHTML = `
+                <optgroup label="Sergé 3% (Standaard - Meest Gekozen)">
+                    <option value="Sergé 3% - Zwart/Zwart">Zwart/Zwart</option>
+                    <option value="Sergé 3% - Zwart/Grijs">Zwart/Grijs</option>
+                    <option value="Sergé 3% - Grijs/Grijs">Grijs/Grijs</option>
+                    <option value="Sergé 3% - Wit/Wit">Wit/Wit</option>
+                    <option value="Sergé 3% - Wit/Grijs">Wit/Grijs</option>
+                    <option value="Sergé 3% - Zand/Zand">Zand/Zand</option>
+                </optgroup>
+                <optgroup label="Sergé 1% (+ Toeslag)">
+                    <option value="Sergé 1% - Zwart/Zwart">Zwart/Zwart</option>
+                    <option value="Sergé 1% - Zwart/Grijs">Zwart/Grijs</option>
+                </optgroup>
+                <optgroup label="Lunar 0% Verduisterend (+ Toeslag)">
+                    <option value="Lunar 0% - Zwart">Zwart</option>
+                    <option value="Lunar 0% - Grijs">Grijs</option>
+                </optgroup>
+                <option value="Eigen Kleurcode">Eigen Kleurcode / Anders...</option>
+            `;
+            document.getElementById('kleur_doek_groep').style.display = 'block';
+        } else {
+            document.getElementById('kleur_doek_groep').style.display = 'none';
+        }
+        checkEigenDoekKleur(); 
+
+        let kastSelect = document.getElementById('kastvorm');
+        if (isRolluik) {
+            kastSelect.innerHTML = '<option value="Afgeschuind">Afgeschuind (Standaard)</option><option value="Vierkant">Vierkant</option><option value="Rond">Rond (+ 10% Toeslag op basis)</option>';
+        } else if (!isZonnescherm && !isUitvalscherm) {
+            kastSelect.innerHTML = '<option value="Afgeschuind">Afgeschuind (Standaard)</option><option value="Vierkant">Vierkant</option>';
+        }
+        
+        let kapSelect = document.getElementById('kapmaat');
+        if (isRolluik) {
+            kapSelect.innerHTML = '<option value="137">137 mm</option><option value="150">150 mm</option><option value="165">165 mm</option><option value="180">180 mm</option><option value="205">205 mm</option>';
+        } else if (isSombre && (isZip || isStandaardScreen)) {
+            kapSelect.innerHTML = '<option value="92.5">92,5 mm</option><option value="112.5">112,5 mm</option>';
+        } else {
+            let hKap = sys.includes("95") ? "95" : (sys.includes("105") ? "105" : "125");
+            kapSelect.innerHTML = `<option value="${hKap}">${hKap} mm</option>`;
+        }
+
+        let motorSelect = document.getElementById('motor');
+        if (isSombre) {
+            if (isRolluik) {
+                motorSelect.innerHTML = `<option value="Degalux Motor">Sombre Standaard Motor (+ € 63,00)</option><option value="Degalux Radio Motor">Sombre Radio Motor (+ € 97,00)</option><option value="Degalux Radio Solar Motor">Sombre Solar Motor (+ € 228,00)</option><option value="Somfy RS100 IO" selected>Somfy RS100 IO (+ € 222,00)</option><option value="Somfy RS100 Solar IO">Somfy RS100 Solar IO (+ € 361,00)</option>`;
+            } else if (isZonnescherm) {
+                motorSelect.innerHTML = `<option value="Degalux Motor">Sombre Standaard Motor (Inbegrepen)</option><option value="Degalux Radio Motor">Sombre Radio Motor (+ € 74,00)</option><option value="Degalux Solar Motor">Sombre Solar Motor (+ € 232,00)</option><option value="Somfy Sunea IO" selected>Somfy Sunea IO (+ € 232,00)</option>`;
+            } else if (isUitvalscherm) {
+                motorSelect.innerHTML = `<option value="Degalux Motor">Sombre Standaard Motor (Inbegrepen)</option><option value="Degalux Radio Motor">Sombre Radio Motor (+ € 74,00)</option><option value="Degalux Solar Motor">Sombre Solar Motor (+ € 165,00)</option><option value="Somfy Sunea IO" selected>Somfy Sunea IO (+ € 226,00)</option>`;
+            } else { 
+                // Screens & Ritsscreens Sombre
+                motorSelect.innerHTML = `<option value="Degalux Motor">Sombre Standaard Motor (Inbegrepen)</option><option value="Degalux Radio Motor">Sombre Radio Motor (+ € 44,00)</option><option value="Degalux Solar Motor">Sombre Solar Motor (+ € 165,00)</option><option value="Somfy Sunilus IO" selected>Somfy Sunilus IO (+ € 182,00)</option><option value="Somfy Solar IO">Somfy Solar IO (+ € 298,00)</option>`;
+            }
+        } else { 
+            if (isSolar && isRolluik) motorSelect.innerHTML = '<option value="Somfy RS100 Solar IO">Somfy RS100 Solar IO (Inbegrepen)</option>';
+            else if (isSolar && isZip) motorSelect.innerHTML = '<option value="Somfy Solar IO">Somfy Solar IO (Inbegrepen)</option>';
+            else if (isRolluik) motorSelect.innerHTML = `<option value="Somfy RS 100 IO" selected>Somfy RS100 IO (Inbegrepen in prijs)</option><option value="Somfy Ilmo WT">Somfy Ilmo WT (Schakelaar) - Minderprijs € 85,00</option>`;
+            else motorSelect.innerHTML = `<option value="Somfy Sunilus IO" selected>Somfy Sunilus IO (Inbegrepen in prijs)</option><option value="Somfy Maestria IO">Somfy Maestria IO (Obstakelherkenning) + € 50,00</option><option value="Somfy LT WT">Somfy LT WT (Schakelaar) - Minderprijs € 100,00</option>`;
+        }
+
+        let zenderSelect = document.getElementById('zender');
+        if (isSombre) {
+            zenderSelect.innerHTML = `<option value="Geen">Geen zender / Vaste schakelaar</option><option value="Sombre ST 1" selected>Sombre ST 1 Wandzender (+ € 31,00)</option><option value="Sombre ST 15">Sombre ST 15 Kanaals (+ € 42,00)</option><option value="Situo 1 IO">Somfy Situo 1 IO (+ € 58,00)</option><option value="Situo 5 IO">Somfy Situo 5 IO (+ € 76,00)</option>`;
+        } else {
+            zenderSelect.innerHTML = `<option value="Geen">Geen zender / Vaste schakelaar</option><option value="Situo 1 IO" selected>Situo 1 IO (1-kanaals) + € 49,00</option><option value="Situo 5 IO">Situo 5 IO (5-kanaals) + € 69,00</option><option value="Smoove 1 IO">Smoove 1 IO (Wandzender) + € 49,00</option><option value="Somfy Amy 1 io">Somfy Amy 1 io (Temp. sensor) + € 54,00</option>`;
+        }
+
+        let geleiderL = document.getElementById('geleider_l');
+        let geleiderR = document.getElementById('geleider_r');
+        let gelOpts = "";
+        
+        if (isSombre && (isZip || isStandaardScreen)) {
+            gelOpts = `<option value="HTF 30x28">HTF 30x28 (Standaard)</option><option value="LHTF 32x30">LHTF klikprofiel 32x30 (+ € 4 p/m)</option>`;
+        } else if (isRolluik) {
+            gelOpts = `<option value="HTF 53">HTF 53 (Standaard)</option><option value="LHTF 53">LHTF 53 (Standaard)</option><option value="HF 45">HF 45 (Standaard)</option><option value="LHF 45">LHF 45 (Standaard)</option><option value="FHTF-12">FHTF-12 (+ € 20 p/m)</option><option value="FHTF-20">FHTF-20 (+ € 20 p/m)</option>`;
+        } else {
+            gelOpts = `<option value="Standaard Geleider (Breedte: 37,5 mm)">Standaard Geleider (Breedte: 37,5 mm)</option><option value="Klikgeleider (Standaard)">Klikgeleider (Standaard)</option><option value="Patio">Patio Geleider (+ € 15 p/m)</option><option value="Opvul">Opvul Geleider (+ € 25 p/m)</option><option value="Inbouw">Inbouw Geleider (+ € 25 p/m)</option>`;
+        }
+        
+        // BUGFIX 2: Forceer een reset van de opties zonder string checks
+        geleiderL.innerHTML = gelOpts;
+        geleiderR.innerHTML = gelOpts;
+
+        let koppelSelect = document.getElementById('koppeling');
+        koppelSelect.innerHTML = '<option value="Nee">Nee, vrijstaand systeem</option>';
+        if (isRolluik) koppelSelect.innerHTML += '<option value="MHTF">Koppeling MHTF geleider (2 delen) + € 185,-</option>';
+        else if (!isZonnescherm && !isUitvalscherm) koppelSelect.innerHTML += `<option value="Koppel 1 bediening">Koppeling 2 delen, 1 bediening (- € 125,-)</option><option value="Koppel 2 bedieningen">Koppeling 2 delen, 2 afzonderlijke motoren (+ € 195,-)</option>`;
+
+        autoSelectKap();
+        updateBestelmaat();
+    }
+    
+    function checkEigenDoekKleur() {
+        let val = document.getElementById('kleur_doek') ? document.getElementById('kleur_doek').value : "";
+        let eigenBox = document.getElementById('kleur_doek_eigen_groep');
+        if (eigenBox) eigenBox.style.display = val === "Eigen Kleurcode" ? "block" : "none";
+    }
+
+    // ============================================================================
+    // DAGMAAT -> BESTELMAAT ENGINE 2.0
+    // ============================================================================
+    function updateBestelmaat() {
+        let montage = document.getElementById('montage_situatie').value;
+        let b = parseInt(document.getElementById('maat_b').value) || 0;
+        let h = parseInt(document.getElementById('maat_h').value) || 0;
+        
+        let kap = parseFloat(document.getElementById('kapmaat').value) || 0;
+        let gelL = document.getElementById('geleider_l') ? document.getElementById('geleider_l').value : "";
+        let gelR = document.getElementById('geleider_r') ? document.getElementById('geleider_r').value : "";
+        let wL = GELEIDER_BREEDTES[gelL] || 0;
+        let wR = GELEIDER_BREEDTES[gelR] || 0;
+
+        let isOdd = montage === "ODD";
+        let isIdd = montage === "IDD" || montage === "IDD_KAP";
+        let isVrij = montage === "VRIJ";
+
+        document.getElementById('set_odd').style.display = isOdd ? 'block' : 'none';
+        document.getElementById('set_idd').style.display = isIdd ? 'block' : 'none';
+
+        let cfg_aftrek_b = parseInt(document.getElementById('cfg_aftrek_b').value) || 0;
+        let cfg_oversteek_b = parseInt(document.getElementById('cfg_oversteek_b').value) || 0;
+        let cfg_oversteek_h = parseInt(document.getElementById('cfg_oversteek_h').value) || 0;
+        
+        let hasVerstek = gelL.includes("FHTF") || gelL.includes("LHTF") || gelR.includes("FHTF") || gelR.includes("LHTF");
+        document.getElementById('set_verstek').style.display = hasVerstek ? 'block' : 'none';
+        let cfg_verstek = document.getElementById('cfg_verstek').checked && hasVerstek;
+
+        let vb = document.getElementById('valse_vensterbank') ? document.getElementById('valse_vensterbank').value : "Nee";
+        document.getElementById('set_vb').style.display = (vb !== "Nee" && !isVrij) ? 'block' : 'none';
+        let cfg_vb_aftrek = document.getElementById('cfg_vb_aftrek').checked && (vb !== "Nee");
+
+        let bestelB = b;
+        let bestelH = h;
+        let calcLogB = "";
+        let calcLogH = "";
+
+        if (montage === "IDD") {
+            bestelB = b - cfg_aftrek_b;
+            bestelH = h;
+            calcLogB = `${b} (Dag) - ${cfg_aftrek_b} (Speling) = ${bestelB} mm`;
+            calcLogH = `${h} (Dag) = ${bestelH} mm`;
+        } else if (montage === "IDD_KAP") {
+            bestelB = b - cfg_aftrek_b;
+            bestelH = h + kap;
+            calcLogB = `${b} (Dag) - ${cfg_aftrek_b} (Speling) = ${bestelB} mm`;
+            calcLogH = `${h} (Dag) + ${kap} (Kap) = ${bestelH} mm`;
+        } else if (montage === "ODD") {
+            bestelB = b + wL + wR + cfg_oversteek_b;
+            bestelH = h + kap + cfg_oversteek_h;
+            calcLogB = `${b} (Dag) + ${wL} (Gel.L) + ${wR} (Gel.R) + ${cfg_oversteek_b} (Speling) = ${bestelB} mm`;
+            calcLogH = `${h} (Dag) + ${kap} (Kap) + ${cfg_oversteek_h} (Oversteek) = ${bestelH} mm`;
+        } else {
+            calcLogB = `${b} (Vrije invoer) = ${bestelB} mm`;
+            calcLogH = `${h} (Vrije invoer) = ${bestelH} mm`;
+        }
+
+        if (montage !== "VRIJ") {
+            if (cfg_verstek) {
+                bestelH += 20;
+                calcLogH = calcLogH.replace(" mm", ` + 20 (Verstek) = ${bestelH} mm`);
+            }
+            if (cfg_vb_aftrek) {
+                bestelH -= 20;
+                calcLogH = calcLogH.replace(" mm", ` - 20 (Vensterbank) = ${bestelH} mm`);
+            }
+            
+            let corB = parseInt(document.getElementById('corr_b').value) || 0;
+            let corH = parseInt(document.getElementById('corr_h').value) || 0;
+            if (corB !== 0) {
+                bestelB += corB;
+                calcLogB = calcLogB.replace(" mm", ` ${corB > 0 ? "+" : ""} ${corB} (Corr) = ${bestelB} mm`);
+            }
+            if (corH !== 0) {
+                bestelH += corH;
+                calcLogH = calcLogH.replace(" mm", ` ${corH > 0 ? "+" : ""} ${corH} (Corr) = ${bestelH} mm`);
+            }
+        }
+
+        document.getElementById('calc_log_b').innerText = "Breedte: " + calcLogB;
+        document.getElementById('calc_log_h').innerText = "Hoogte: " + calcLogH;
+
+        document.getElementById('calc_bestel_b').innerText = bestelB > 0 ? Math.round(bestelB) + " mm" : "- mm";
+        document.getElementById('calc_bestel_h').innerText = bestelH > 0 ? Math.round(bestelH) + " mm" : "- mm";
+        
+        return { w: Math.round(bestelB), h: Math.round(bestelH) };
+    }
+
+    // ============================================================================
+    // VRIJE PROFIELEN (HOEK / KOKER)
+    // ============================================================================
+    window.voegProfielToe = function() {
+        const container = document.getElementById('profielenContainer');
+        const id = window.profielenTeller++;
+        const div = document.createElement('div');
+        div.className = 'dynamic-row'; div.id = `profiel-row-${id}`;
+        
+        let typeOpts = Object.keys(PROFIEL_PRIJZEN).map(k => `<option value="${k}">${k}</option>`).join('');
+        let kleurOpts = RAL_KLEUREN_PROFIEL.map(k => `<option value="${k}">${k}</option>`).join('');
+        
+        div.innerHTML = `
+            <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+                <div style="flex:2; min-width:200px;"><label>Type Profiel</label><select id="prof-type-${id}" onchange="renderWinkelwagen()">${typeOpts}</select></div>
+                <div style="flex:1; min-width:150px;"><label>Kleur</label><select id="prof-kleur-${id}" onchange="checkEigenKleur(${id}); renderWinkelwagen()">${kleurOpts}</select></div>
+                <div style="flex:1; min-width:100px; display:none;" id="prof-eigenkleur-box-${id}"><label>RAL Code</label><input type="text" id="prof-eigenkleur-${id}" placeholder="Bijv. 3005" oninput="renderWinkelwagen()"></div>
+                <div style="flex:1; min-width:120px;"><label>Afwerking</label><select id="prof-afw-${id}" onchange="renderWinkelwagen()"><option value="Glad">Glad</option><option value="Structuur">Structuur</option></select></div>
+                <div style="flex:1; min-width:100px;"><label>Lengte (mm)</label><input type="number" id="prof-lengte-${id}" placeholder="3000" oninput="renderWinkelwagen()"></div>
+                <div style="flex:0.5; min-width:70px;"><label>Aantal</label><input type="number" id="prof-aantal-${id}" value="1" min="1" oninput="renderWinkelwagen()"></div>
+                <button type="button" class="btn btn-remove" onclick="document.getElementById('profiel-row-${id}').remove(); renderWinkelwagen();">X</button>
+            </div>
+        `;
+        container.appendChild(div);
+        renderWinkelwagen();
+    }
+
+    window.checkEigenKleur = function(id) {
+        let val = document.getElementById(`prof-kleur-${id}`).value;
+        document.getElementById(`prof-eigenkleur-box-${id}`).style.display = val.includes("Eigen Kleur") ? "block" : "none";
+    }
+
+    // ============================================================================
+    // 6. CALCULATIE LOGICA & VEILIGHEIDSGUARDS
+    // ============================================================================
+    function berekenHuidigItem() {
+        var bIn = parseInt(document.getElementById('maat_b').value) || 0;
+        var hIn = parseInt(document.getElementById('maat_h').value) || 0;
+        
+        var maten = updateBestelmaat();
+        var bestelB = maten.w;
+        var bestelH = maten.h;
+
+        var sys = document.getElementById('systeem').value;
+        var motor = document.getElementById('motor').value;
+        var aantal = parseInt(document.getElementById('aantal').value) || 1;
+        var opmerking = document.getElementById('opmerking').value;
+        
+        var isRolluik = sys.includes("Rolluik");
+        var isZip = sys === "Sombre Ritsscreen" || sys.includes("Zip-Screen");
+        var isStandaardScreen = sys === "Sombre Screen";
+        var isZip125 = sys.includes("125");
+        var isSombre = sys.includes("Sombre");
+        var isZonnescherm = sys.includes("Zonnescherm");
+        var isUitvalscherm = sys.includes("Uitvalscherm");
+
+        var bMeter = bestelB / 1000;
+        var hMeter = bestelH / 1000;
+
+        var grid = null;
+        if (sys === "Rolluik RS-38" || sys === "Rolluik RS-38 Solar") grid = null; 
+        else if (sys === "Zip-Screen 95") grid = GRID_ZIP95;
+        else if (sys === "Zip-Screen 95 Solar") grid = GRID_ZIP95_SOLAR;
+        else if (sys === "Zip-Screen 105") grid = GRID_ZIP105;
+        else if (sys === "Zip-Screen 105 Solar") grid = GRID_ZIP105_SOLAR;
+        else if (sys === "Zip-Screen 125") grid = GRID_ZIP125;
+        else if (sys === "Zip-Screen 125 Solar") grid = GRID_ZIP125_SOLAR;
+        else if (sys === "Sombre Rolluik") grid = GRID_SOMBRE_ROLLUIK; 
+        else if (sys === "Sombre Ritsscreen") grid = GRID_SOMBRE_SCREEN_RITS;
+        else if (sys === "Sombre Screen") grid = GRID_SOMBRE_SCREEN;
+        else if (sys === "Sombre Zonnescherm") grid = GRID_SOMBRE_ZONNESCHERM;
+        else if (sys === "Sombre Uitvalscherm") grid = GRID_SOMBRE_UITVALSCHERM;
+
+        var baseInkoop = 0;
+        var baseVerkoop = 0;
+        var optInkoop = 0;
+        var optVerkoop = 0;
+        var vasteVerkoopOpties = 0;
+        var vasteInkoopOpties = 0;
+        
+        var outOfBounds = false;
+        var errorMsg = "";
+
+        // BUGFIX 3: Begrenzing Heroal prijzen op 3000 mm hoogte (de max in de grid)
+        if (sys === "Rolluik RS-38") {
+            if (bestelB > 3800 || bestelH > 3000) errorMsg = `❌ Afmeting te groot. Maximaal voor Heroal RS38 is 3800 mm breed en 3000 mm hoog.`;
+            else {
+                baseInkoop = getGridPriceBilinear(GRID_HEROAL_RS38_INKOOP_EX, bestelB, bestelH);
+                baseVerkoop = getGridPriceBilinear(GRID_HEROAL_RS38_VERKOOP_INCL, bestelB, bestelH);
+            }
+        } else if (sys === "Rolluik RS-38 Solar") {
+            if (bestelB > 3800 || bestelH > 3000) errorMsg = `❌ Afmeting te groot. Maximaal voor Heroal RS38 Solar is 3800 mm breed en 3000 mm hoog.`;
+            else {
+                baseInkoop = getGridPriceBilinear(GRID_HEROAL_RS38_SOLAR_INKOOP_EX, bestelB, bestelH);
+                baseVerkoop = getGridPriceBilinear(GRID_HEROAL_RS38_SOLAR_VERKOOP_INCL, bestelB, bestelH);
+            }
+        } else if (grid) {
+            let max_h = grid[grid.length - 1].h;
+            let max_w = grid[0].w[grid[0].w.length - 1];
+            if (bestelH > max_h || bestelB > max_w) {
+                outOfBounds = true;
+                errorMsg = `❌ Afmeting te groot. Maximaal voor dit systeem is ${max_w} mm breed en ${max_h} mm hoog/uitval.`;
+            } else {
+                let berekendeWaarde = getGridPriceBilinear(grid, bestelB, bestelH);
+                if (isSombre) {
+                    baseInkoop = berekendeWaarde;
+                    baseVerkoop = (baseInkoop * VERKOOP_FACTOR_SOMBRE) * 1.21;
+                } else {
+                    baseVerkoop = berekendeWaarde; 
+                    baseInkoop = (baseVerkoop / 1.21) * HEROAL_INKOOP_FACTOR; 
+                }
+            }
+        }
+
+        // Fysieke Motor Limieten
+        let minW = 0;
+        if (motor.includes("Degalux Radio Motor")) minW = 750;
+        else if (motor.includes("Degalux Radio Solar Motor") || motor.includes("Degalux Solar Motor")) minW = 800;
+        else if (motor.includes("Degalux Motor")) minW = 615;
+        else if (motor.includes("RS100 Solar") || motor.includes("Solar RS100")) minW = 595;
+        else if (motor.includes("Solar IO")) minW = 595;
+        else if (motor.includes("RS100 IO") || motor.includes("RS 100 IO")) minW = 615;
+        else if (motor.includes("Sunea IO")) minW = 575;
+        else if (motor.includes("Sunilus IO")) minW = 680;
+        
+        if (minW > 0 && bestelB < minW && !errorMsg && !isZonnescherm && !isUitvalscherm) {
+            errorMsg = `❌ Systeem te smal. De gekozen motor vereist een minimale fabrieksbreedte van ${minW} mm.`;
+        }
+
+        // Zonnescherm Knikarm Botspreventie
+        if (isZonnescherm && !errorMsg) {
+            if (bestelH >= 2000 && bestelB < 2400) errorMsg = "❌ Bij een uitval van 2000mm is een minimale breedte van 2400mm vereist i.v.m. overlappende knikarmen.";
+            else if (bestelH >= 2500 && bestelB < 2900) errorMsg = "❌ Bij een uitval van 2500mm is een minimale breedte van 2900mm vereist i.v.m. overlappende knikarmen.";
+            else if (bestelH >= 3000 && bestelB < 3500) errorMsg = "❌ Bij een uitval van 3000mm is een minimale breedte van 3500mm vereist i.v.m. overlappende knikarmen.";
+        }
+// Check voor kleuren die niet in 137mm passen
+        let gekozenKleurFrame = document.getElementById('kleur_frame').value;
+        let gekozenKap = document.getElementById('kapmaat') ? document.getElementById('kapmaat').value : "";
+        if (isRolluik && gekozenKap === "137" && gekozenKleurFrame.includes("*") && !errorMsg) {
+            errorMsg = "❌ Deze kleur omkasting is helaas niet leverbaar in combinatie met een 137 mm kast.";
+        }
+        var log = [];
+        var klant = [];
+
+        let kast = document.getElementById('kastvorm') ? document.getElementById('kastvorm').value : "";
+        if (!isZonnescherm && !isUitvalscherm) {
+            let kapmaatText = "";
+            let kMaat = document.getElementById('kapmaat').value;
+            kapmaatText = ` (Maat: ${kMaat} mm)`;
+            
+            if (isSombre && (isZip || isStandaardScreen) && motor === "Somfy Solar RS100") {
+                kapmaatText = ` (Maat: 112.5 mm verplicht bij RS100 Solar)`;
+            }
+
+            if (isRolluik && kast === "Rond") {
+                if(isSombre) optInkoop += (baseInkoop * 0.10);
+                else optVerkoop += (baseVerkoop * 0.10);
+            }
+            klant.push(`  + Kast / Bak: ${kast}${kapmaatText}`);
+        }
+
+        let motorKant = document.getElementById('motor_kant').value;
+        let zender = document.getElementById('zender').value;
+        let snoer = document.getElementById('snoer').value;
+        let kleur = document.getElementById('kleur_frame').value;
+        
+        // BUGFIX 4: Motoren en zenders toevoegen als vaste consumentenprijzen (geen 1.9 factor)
+        function voegVasteOptieToe(prijsIncl, omschrijving) {
+            vasteVerkoopOpties += prijsIncl;
+            // Ruwe schatting interne inkoop obv inkoopfactor heroal om toch een interne prijs te genereren
+            vasteInkoopOpties += (prijsIncl / 1.21) * HEROAL_INKOOP_FACTOR;
+            klant.push(omschrijving);
+        }
+
+        if (isSombre) {
+            if (isRolluik) {
+                if (motor === "Degalux Motor") voegVasteOptieToe(63, `  + Motor: Sombre Standaard Motor | Kant: ${motorKant}`);
+                else if (motor === "Degalux Radio Motor") voegVasteOptieToe(97, `  + Motor: Sombre Radio Motor | Kant: ${motorKant}`);
+                else if (motor === "Degalux Radio Solar Motor") voegVasteOptieToe(228, `  + Motor: Sombre Solar Motor | Kant: ${motorKant}`);
+                else if (motor === "Somfy RS100 IO") voegVasteOptieToe(222, `  + Motor: Somfy RS100 IO | Kant: ${motorKant}`);
+                else if (motor === "Somfy RS100 Solar IO") voegVasteOptieToe(361, `  + Motor: Somfy RS100 Solar IO | Kant: ${motorKant}`);
+                else klant.push(`  + Motor: Inbegrepen | Kant: ${motorKant}`);
+            } else if (isZonnescherm) {
+                if (motor === "Degalux Radio Motor") voegVasteOptieToe(74, `  + Motor: Sombre Radio Motor | Kant: ${motorKant}`);
+                else if (motor === "Degalux Solar Motor") voegVasteOptieToe(232, `  + Motor: Sombre Solar Motor | Kant: ${motorKant}`);
+                else if (motor === "Somfy Sunea IO") voegVasteOptieToe(232, `  + Motor: Somfy Sunea IO | Kant: ${motorKant}`);
+                else klant.push(`  + Motor: Sombre Standaard Motor | Kant: ${motorKant}`);
+            } else if (isUitvalscherm) {
+                if (motor === "Degalux Radio Motor") voegVasteOptieToe(74, `  + Motor: Sombre Radio Motor | Kant: ${motorKant}`);
+                else if (motor === "Degalux Solar Motor") voegVasteOptieToe(165, `  + Motor: Sombre Solar Motor | Kant: ${motorKant}`);
+                else if (motor === "Somfy Sunea IO") voegVasteOptieToe(226, `  + Motor: Somfy Sunea IO | Kant: ${motorKant}`);
+                else klant.push(`  + Motor: Sombre Standaard Motor | Kant: ${motorKant}`);
+            } else { 
+                if (motor === "Degalux Radio Motor") voegVasteOptieToe(44, `  + Motor: Sombre Radio Motor | Kant: ${motorKant}`);
+                else if (motor === "Degalux Solar Motor") voegVasteOptieToe(165, `  + Motor: Sombre Solar Motor | Kant: ${motorKant}`);
+                else if (motor === "Somfy Sunilus IO") voegVasteOptieToe(182, `  + Motor: Somfy Sunilus IO | Kant: ${motorKant}`);
+                else if (motor === "Somfy Solar IO") voegVasteOptieToe(298, `  + Motor: Somfy Solar IO | Kant: ${motorKant}`);
+                else klant.push(`  + Motor: Sombre Standaard Motor | Kant: ${motorKant}`);
+            }
+
+            if (zender === "Sombre ST 1") voegVasteOptieToe(31, `  + Zender: Sombre ST 1 Wandzender`);
+            else if (zender === "Sombre ST 15") voegVasteOptieToe(42, `  + Zender: Sombre ST 15 Kanaals`);
+            else if (zender === "Situo 1 IO") voegVasteOptieToe(58, `  + Zender: Somfy Situo 1 IO`);
+            else if (zender === "Situo 5 IO") voegVasteOptieToe(76, `  + Zender: Somfy Situo 5 IO`);
+
+            if (!isZonnescherm && !isUitvalscherm) {
+                let aantalGelL = parseInt(document.getElementById('aantal_gel_l').value) || 1;
+                let aantalGelR = parseInt(document.getElementById('aantal_gel_r').value) || 1;
+                let extraGeleiders = (aantalGelL - 1) + (aantalGelR - 1);
+                if (extraGeleiders > 0) {
+                    optInkoop += (extraGeleiders * hMeter * 15); 
+                    klant.push(`  + Uitvulling: ${extraGeleiders}x Extra geleider(s) op elkaar gestapeld`);
+                }
+
+                let vb = document.getElementById('valse_vensterbank').value;
+                if (vb === "Ja 20x30") optInkoop += (20 * bMeter);
+                else if (vb === "Ja 20x70") optInkoop += (25 * bMeter);
+            }
+
+            if (isZip || isStandaardScreen || isZonnescherm || isUitvalscherm) {
+                let doek = document.getElementById('kleur_doek').value;
+                if (doek === "Eigen Kleurcode") doek = document.getElementById('kleur_doek_eigen').value || "Eigen Kleur";
+                
+                if (doek.includes("1%")) optInkoop += (13 * (bMeter * hMeter));
+                else if (doek.includes("0%") || doek.includes("Lunar")) optInkoop += (53 * (bMeter * hMeter));
+                else if (doek.includes("Dickson") || doek.includes("Swela") || doek.includes("Sattler")) optInkoop += (17 * (bMeter * hMeter));
+            }
+
+            let kleurLamel = document.getElementById('kleur_lamel').value;
+            if (kleur === "Afwijkende RAL") {
+                optInkoop += (baseInkoop * 0.10);
+            }
+            if (kleur.includes("+8%") || (isRolluik && kleurLamel.includes("+8%"))) {
+                optInkoop += (baseInkoop * 0.08);
+            }
+            if(document.getElementById('tahoma') && document.getElementById('tahoma').value === "Ja") {
+                voegVasteOptieToe(169, "  + Smart Home: Inclusief Somfy Tahoma Switch Box");
+            }
+
+            optVerkoop = (optInkoop * VERKOOP_FACTOR_SOMBRE) * 1.21;
+            
+        } else {
+            // Heroal Opties
+            if(motor === "Somfy Ilmo WT") { optVerkoop -= 85; klant.push(`  + Motor: Somfy Ilmo WT (Schakelaar) | Kant: ${motorKant}`); }
+            else if(motor === "Somfy LT WT") { optVerkoop -= 100; klant.push(`  + Motor: Somfy LT WT (Schakelaar) | Kant: ${motorKant}`); }
+            else if(motor === "Somfy Maestria IO") { optVerkoop += 50; klant.push(`  + Motor: Somfy Maestria IO (Obstakel) | Kant: ${motorKant}`); }
+            else { klant.push(`  + Motor: ${motor} | Kant: ${motorKant}`); } 
+
+            if(zender === "Situo 1 IO") voegVasteOptieToe(49, `  + Zender: Situo 1 IO`);
+            else if(zender === "Situo 5 IO") voegVasteOptieToe(69, `  + Zender: Situo 5 IO`);
+            else if(zender === "Smoove 1 IO") voegVasteOptieToe(49, `  + Zender: Smoove 1 IO (Wand)`);
+            else if(zender === "Somfy Amy 1 io") voegVasteOptieToe(54, `  + Zender: Somfy Amy 1 io`);
+
+            if (snoer === "Lang") { optVerkoop += 28.00; klant.push("  + Extra: Lang motorsnoer (10m Wit / 5m Zwart)"); }
+
+            let aantalGelL = parseInt(document.getElementById('aantal_gel_l').value) || 1;
+            let aantalGelR = parseInt(document.getElementById('aantal_gel_r').value) || 1;
+            let extraGeleiders = (aantalGelL - 1) + (aantalGelR - 1);
+            if (extraGeleiders > 0) {
+                optVerkoop += (extraGeleiders * hMeter * 25); 
+                klant.push(`  + Uitvulling: ${extraGeleiders}x Extra geleider(s) op elkaar gestapeld`);
+            }
+            
+            let kop = document.getElementById('koppeling').value;
+            if (kop === "MHTF") { optVerkoop += 185; klant.push("  + Uitvoering: Gekoppeld (MHTF)"); }
+            else if (kop === "Koppel 1 bediening") { optVerkoop -= 125; klant.push("  + Uitvoering: Gekoppeld (1 bediening)"); }
+            else if (kop === "Koppel 2 bedieningen") { optVerkoop += 195; klant.push("  + Uitvoering: Gekoppeld (2 afz. bedieningen)"); }
+
+            if (document.getElementById('boren').value === "Ja") { optVerkoop += 12.75; klant.push("  + Afwerking: Geleiders af fabriek voorgeboord"); }
+
+            let vb = document.getElementById('valse_vensterbank').value;
+            if (vb === "Ja 20x30") { optVerkoop += (20.40 * bMeter); klant.push("  + Afwerking: Valse Vensterbank 20x30mm"); }
+            else if (vb === "Ja 20x70") { optVerkoop += (25.50 * bMeter); klant.push("  + Afwerking: Valse Vensterbank 20x70mm"); }
+            if (vb !== "Nee") {
+                let vbKleur = document.getElementById('kleur_vensterbank').value || "Zelfde als kast";
+                klant.push(`  + Kleur Vensterbank: ${vbKleur}`);
+            }
+
+            if (isZip || isStandaardScreen) {
+                if (document.getElementById('stapelprofiel').value === "Ja") { optVerkoop += (22.95 * bMeter); klant.push("  + Afwerking: Stapelprofiel 1cm"); }
+                
+                let doek = document.getElementById('kleur_doek').value;
+                if (doek === "Eigen Kleurcode") doek = document.getElementById('kleur_doek_eigen').value || "Eigen Kleur";
+
+                if (doek.includes("1%")) optVerkoop += (baseVerkoop * 0.05);
+                else if (doek.includes("0%") || doek.includes("Lunar")) optVerkoop += (baseVerkoop * 0.10);
+                else if (doek === "Buiten collectie" || doek.includes("Eigen")) optVerkoop += 132.60;
+            }
+
+            if (isZip125 && document.getElementById('onderlijst_125').value === "Ja") { optVerkoop += (79.05 * bMeter); klant.push("  + Uitvoering: Verzwaarde onderlijst"); }
+
+           let kleurLamel = document.getElementById('kleur_lamel').value;
+            if (kleur === "Afwijkende RAL") {
+                optVerkoop += (baseVerkoop * 0.10);
+                klant.push("  + Kleur Kast/Geleiders: Afwijkende RAL-kleur (Maatwerk)");
+            } else if (kleur.includes("+8%") || (isRolluik && kleurLamel.includes("+8%"))) {
+                optVerkoop += (baseVerkoop * 0.08);
+                klant.push("  + Kleur Kast/Geleiders: " + kleur);
+            } else {
+                klant.push("  + Kleur Kast/Geleiders: " + kleur);
+            }
+
+            if(document.getElementById('tahoma') && document.getElementById('tahoma').value === "Ja") {
+                voegVasteOptieToe(169, "  + Smart Home: Inclusief Somfy Tahoma Switch Box");
+            }
+
+            optInkoop = (optVerkoop / 1.21) * HEROAL_INKOOP_FACTOR;
+        }
+
+        let vullingKleur = isRolluik ? document.getElementById('kleur_lamel').value : document.getElementById('kleur_doek').value;
+        if (vullingKleur === "Eigen Kleurcode") vullingKleur = document.getElementById('kleur_doek_eigen').value || "Eigen Kleur";
+
+        // BUGFIX 5: Afronding verplaatst naar het weergavemoment, consument Systeem blijft on-afgerond
+        let totaalConsumentSysteem = baseVerkoop + optVerkoop;
+        let inkoopSchattingTotaal = baseInkoop + optInkoop + vasteInkoopOpties;
+
+        var montVerkoop = 0;
+        let montKeuze = document.getElementById('montage_keuze').value;
+        if (montKeuze === "Ja Rolluik" || montKeuze === "Ja Uitvalscherm") montVerkoop = 150;
+        else if (montKeuze === "Ja Screen") montVerkoop = 125;
+        else if (montKeuze === "Ja Zonnescherm") montVerkoop = 250;
+
+        // RAW DATA OPSLAAN VOOR BEWERKEN-FUNCTIE
+        let rawData = {
+            sys: sys, b: bIn, h: hIn, aantal: aantal, corr_b: document.getElementById('corr_b').value, corr_h: document.getElementById('corr_h').value,
+            montage_situatie: document.getElementById('montage_situatie').value,
+            cfg_aftrek_b: document.getElementById('cfg_aftrek_b').value, cfg_oversteek_b: document.getElementById('cfg_oversteek_b').value,
+            cfg_oversteek_h: document.getElementById('cfg_oversteek_h').value, cfg_verstek: document.getElementById('cfg_verstek').checked,
+            cfg_vb_aftrek: document.getElementById('cfg_vb_aftrek').checked,
+            kastvorm: document.getElementById('kastvorm') ? document.getElementById('kastvorm').value : "",
+            kapmaat: document.getElementById('kapmaat') ? document.getElementById('kapmaat').value : "",
+            koppeling: document.getElementById('koppeling').value,
+            motor: motor, motor_kant: motorKant, zender: zender, snoer: snoer,
+            geleider_l: document.getElementById('geleider_l') ? document.getElementById('geleider_l').value : "",
+            aantal_gel_l: document.getElementById('aantal_gel_l') ? document.getElementById('aantal_gel_l').value : "1",
+            geleider_r: document.getElementById('geleider_r') ? document.getElementById('geleider_r').value : "",
+            aantal_gel_r: document.getElementById('aantal_gel_r') ? document.getElementById('aantal_gel_r').value : "1",
+            boren: document.getElementById('boren') ? document.getElementById('boren').value : "Nee",
+            tahoma: document.getElementById('tahoma') ? document.getElementById('tahoma').value : "Nee",
+            kleur_frame: kleur, kleur_lamel: document.getElementById('kleur_lamel').value,
+            kleur_doek: document.getElementById('kleur_doek') ? document.getElementById('kleur_doek').value : "",
+            kleur_doek_eigen: document.getElementById('kleur_doek_eigen') ? document.getElementById('kleur_doek_eigen').value : "",
+            valse_vensterbank: document.getElementById('valse_vensterbank').value,
+            kleur_vensterbank: document.getElementById('kleur_vensterbank').value,
+            stapelprofiel: document.getElementById('stapelprofiel').value,
+            onderlijst_125: document.getElementById('onderlijst_125').value,
+            montage_keuze: montKeuze, opmerking: opmerking
+        };
+
+        return { 
+            sys: sys, dag_b: bIn, dag_h: hIn, bestel_b: bestelB, bestel_h: bestelH, 
+            aantal: aantal, kleur: kleur, vullingKleur: vullingKleur, 
+            totaalConsumentSysteem: totaalConsumentSysteem, montVerkoop: montVerkoop, vasteVerkoopOpties: vasteVerkoopOpties,
+            inkoopSchatting: inkoopSchattingTotaal, errorMsg: errorMsg,
+            log: log, klant: klant, opmerking: opmerking, outOfBounds: outOfBounds,
+            raw: rawData
+        };
+    }
+
+    setInterval(function() {
+        let b = document.getElementById('maat_b').value;
+        let h = document.getElementById('maat_h').value;
+        let preText = document.getElementById('preview_tekst');
+        let btnAdd = document.getElementById('btn_add_order');
+        
+        if(!b || !h) {
+            preText.innerHTML = "Vul de afmetingen in om de prijs te bereken.";
+            btnAdd.disabled = false;
+            btnAdd.style.opacity = '1';
+            return;
+        }
+        
+        let item = berekenHuidigItem();
+
+        if (item.errorMsg) {
+            preText.innerHTML = `<span style="color:#e74c3c; font-size:15px; font-weight:bold;">${item.errorMsg}</span>`;
+            btnAdd.disabled = true;
+            btnAdd.style.opacity = '0.5';
+        } else {
+            // BUGFIX 7: Beveiliging negatieve maten of geen maten
+            if (item.dag_b <= 0 || item.dag_h <= 0 || item.aantal < 1) {
+                preText.innerHTML = `<span style="color:#e74c3c; font-size:15px; font-weight:bold;">❌ Vul een geldige afmeting in (groter dan 0).</span>`;
+                btnAdd.disabled = true;
+                btnAdd.style.opacity = '0.5';
+                return;
+            }
+
+            btnAdd.disabled = false;
+            btnAdd.style.opacity = '1';
+            let verkoopStukIncl = item.totaalConsumentSysteem + item.montVerkoop + item.vasteVerkoopOpties;
+            let tekst = `<strong>${item.aantal}x ${item.sys} (Bestelmaat: ${item.bestel_b} x ${item.bestel_h} mm)</strong><br>`;
+            tekst += `Prijs voor dit item (incl. 21% BTW, Motor, Opties & Montage): <strong style="color:#005a9c; font-size:18px;">${formatBedrag(verkoopStukIncl * item.aantal)}</strong>`;
+            preText.innerHTML = tekst;
+        }
+    }, 400);
+
+    // ============================================================================
+    // 7. WINKELWAGEN FUNCTIES (NU MET BEWERKEN!)
+    // ============================================================================
+    window.voegToeAanOrder = function() {
+        let item = berekenHuidigItem();
+        if (item.errorMsg) return alert(item.errorMsg);
+        if (item.dag_b <= 0 || item.dag_h <= 0) return alert("Vul eerst een geldige breedte en hoogte/uitval in.");
+        
+        window.winkelwagen.push(item);
+        
+        document.getElementById('maat_b').value = "";
+        document.getElementById('maat_h').value = "";
+        document.getElementById('opmerking').value = "";
+        document.getElementById('corr_b').value = "";
+        document.getElementById('corr_h').value = "";
+        document.getElementById('aantal').value = "1";
+        if(document.getElementById('aantal_gel_l')) document.getElementById('aantal_gel_l').value = "1";
+        if(document.getElementById('aantal_gel_r')) document.getElementById('aantal_gel_r').value = "1";
+        if(document.getElementById('tahoma')) document.getElementById('tahoma').value = "Nee"; 
+        
+        renderWinkelwagen();
+    }
+
+    window.verwijderUitOrder = function(index) {
+        window.winkelwagen.splice(index, 1);
+        renderWinkelwagen();
+    }
+
+    window.bewerkUitOrder = function(index) {
+        let it = window.winkelwagen[index];
+        let r = it.raw;
+
+        document.getElementById('systeem').value = r.sys;
+        updateSysteemUI(); 
+        
+        document.getElementById('maat_b').value = r.b;
+        document.getElementById('maat_h').value = r.h;
+        document.getElementById('corr_b').value = r.corr_b;
+        document.getElementById('corr_h').value = r.corr_h;
+        document.getElementById('aantal').value = r.aantal;
+        document.getElementById('montage_situatie').value = r.montage_situatie;
+        document.getElementById('cfg_aftrek_b').value = r.cfg_aftrek_b;
+        document.getElementById('cfg_oversteek_b').value = r.cfg_oversteek_b;
+        document.getElementById('cfg_oversteek_h').value = r.cfg_oversteek_h;
+        document.getElementById('cfg_verstek').checked = r.cfg_verstek;
+        document.getElementById('cfg_vb_aftrek').checked = r.cfg_vb_aftrek;
+        
+        if (document.getElementById('kastvorm') && r.kastvorm) document.getElementById('kastvorm').value = r.kastvorm;
+        if (document.getElementById('kapmaat') && r.kapmaat) document.getElementById('kapmaat').value = r.kapmaat;
+        document.getElementById('koppeling').value = r.koppeling;
+        
+        document.getElementById('motor').value = r.motor;
+        document.getElementById('motor_kant').value = r.motor_kant;
+        document.getElementById('zender').value = r.zender;
+        document.getElementById('snoer').value = r.snoer;
+        
+        if (document.getElementById('geleider_l')) document.getElementById('geleider_l').value = r.geleider_l;
+        if (document.getElementById('aantal_gel_l')) document.getElementById('aantal_gel_l').value = r.aantal_gel_l;
+        if (document.getElementById('geleider_r')) document.getElementById('geleider_r').value = r.geleider_r;
+        if (document.getElementById('aantal_gel_r')) document.getElementById('aantal_gel_r').value = r.aantal_gel_r;
+        if (document.getElementById('boren')) document.getElementById('boren').value = r.boren;
+        if (document.getElementById('tahoma')) document.getElementById('tahoma').value = r.tahoma;
+        
+        document.getElementById('kleur_frame').value = r.kleur_frame;
+        document.getElementById('kleur_lamel').value = r.kleur_lamel;
+        if (document.getElementById('kleur_doek') && r.kleur_doek) {
+            document.getElementById('kleur_doek').value = r.kleur_doek;
+            checkEigenDoekKleur();
+        }
+        if (document.getElementById('kleur_doek_eigen')) document.getElementById('kleur_doek_eigen').value = r.kleur_doek_eigen;
+        
+        document.getElementById('valse_vensterbank').value = r.valse_vensterbank;
+        document.getElementById('kleur_vensterbank').value = r.kleur_vensterbank;
+        document.getElementById('stapelprofiel').value = r.stapelprofiel;
+        document.getElementById('onderlijst_125').value = r.onderlijst_125;
+        
+        document.getElementById('montage_keuze').value = r.montage_keuze;
+        document.getElementById('opmerking').value = r.opmerking;
+
+        window.winkelwagen.splice(index, 1);
+        renderWinkelwagen();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        triggerUpdate();
+    }
+
+    window.renderWinkelwagen = function() {
+        let cartHtml = "";
+        let totaalSysteemVerkoop = 0;
+        let totaalMontageVerkoop = 0;
+        let totaalVasteVerkoop = 0; 
+        let totaalProfielenVerkoop = 0;
+        let totaalSchattingInkoop = 0;
+        let inkoopLog = [];
+        
+        winkelwagen.forEach((it, index) => {
+             let itemVerkoopIncl = it.totaalConsumentSysteem + it.montVerkoop + it.vasteVerkoopOpties;
+             let itemPrijsInclTotaal = itemVerkoopIncl * it.aantal;
+             
+             totaalSysteemVerkoop += (it.totaalConsumentSysteem * it.aantal);
+             totaalMontageVerkoop += (it.montVerkoop * it.aantal);
+             totaalVasteVerkoop += (it.vasteVerkoopOpties * it.aantal);
+             totaalSchattingInkoop += (it.inkoopSchatting * it.aantal);
+
+             cartHtml += `
+             <div class="cart-item">
+                <div class="cart-item-info">
+                    <strong>${it.aantal}x ${it.sys}</strong> <br>
+                    <span style="font-size:12px; font-weight:normal; color:#888;">(Dagmaat: ${it.dag_b} x ${it.dag_h} mm | Bestelmaat: <strong>${it.bestel_b} x ${it.bestel_h} mm</strong>)</span>
+                    <div style="font-size:12px; color:#666; margin-top:3px;">Frame: ${it.kleur} • Vulling: ${it.vullingKleur} ${it.opmerking ? ' • Locatie: '+it.opmerking : ''}</div>
+                </div>
+                <div class="cart-item-price">${formatBedrag(itemPrijsInclTotaal)}</div>
+                <div>
+                    <button type="button" class="btn-edit" onclick="bewerkUitOrder(${index})" title="Aanpassen">✏️</button>
+                    <button type="button" class="btn-delete" onclick="verwijderUitOrder(${index})" title="Verwijderen">X</button>
+                </div>
+             </div>`;
+             
+             inkoopLog.push(`[SYSTEEM ${index+1}] ${it.aantal}x ${it.sys} (Bestel: ${it.bestel_b}x${it.bestel_h}) -> Exacte Inkoop (Ex. BTW): € ${(it.inkoopSchatting * it.aantal).toFixed(2)}`);
+        });
+
+        for (let i = 0; i < window.profielenTeller; i++) {
+            if(document.getElementById(`profiel-row-${i}`)) {
+                let pType = document.getElementById(`prof-type-${i}`).value;
+                let pKleur = document.getElementById(`prof-kleur-${i}`).value;
+                if(pKleur === "Eigen Kleur (Invullen)") pKleur = "RAL " + document.getElementById(`prof-eigenkleur-${i}`).value;
+                let pAfw = document.getElementById(`prof-afw-${i}`).value;
+                let pLengte = parseInt(document.getElementById(`prof-lengte-${i}`).value) || 0;
+                let pAantal = parseInt(document.getElementById(`prof-aantal-${i}`).value) || 1;
+                
+                if (pLengte > 0) {
+                    let inkoopEx = PROFIEL_PRIJZEN[pType] * (pLengte / 1000) * pAantal;
+                    let verkoopIncl = (inkoopEx * VERKOOP_FACTOR_SOMBRE) * 1.21;
+                    
+                    totaalProfielenVerkoop += verkoopIncl;
+                    totaalSchattingInkoop += inkoopEx;
+                    
+                    cartHtml += `<div class="cart-item" style="background:#f4f9ff; border-color:#3498db;">
+                        <div class="cart-item-info"><strong>${pAantal}x ${pType}</strong><br><span style="font-size:12px; color:#666;">Kleur: ${pKleur} (${pAfw}) | Lengte: ${pLengte} mm</span></div>
+                        <div class="cart-item-price" style="color:#3498db;">${formatBedrag(verkoopIncl)}</div>
+                    </div>`;
+                    
+                    inkoopLog.push(`[PROFIEL] ${pAantal}x ${pType} (${pLengte}mm) -> Inkoop (Ex. BTW): € ${inkoopEx.toFixed(2)}`);
+                }
+            }
+        }
+
+        if (winkelwagen.length === 0 && totaalProfielenVerkoop === 0) {
+            document.getElementById('cart_items').innerHTML = "Winkelwagen is leeg...";
+            document.getElementById('prijs_basis').innerText = "€ 0,00";
+            document.getElementById('prijs_montage').innerText = "€ 0,00";
+            document.getElementById('row_smart').style.display = "none";
+            document.getElementById('row_profielen').style.display = "none";
+            document.getElementById('korting_weergave_rij').style.display = 'none';
+            document.getElementById('prijs_totaal').innerText = "€ 0,00";
+            window.huidigeSubtotaal = 0;
+            return;
+        }
+
+        var vSubtotaal = totaalSysteemVerkoop + totaalMontageVerkoop + totaalVasteVerkoop + totaalProfielenVerkoop; 
+        
+        inkoopLog.push("--------------------------------------------------");
+        inkoopLog.push(`TOTALE ORDER (SOMBRE ZONWERING)`);
+        inkoopLog.push(`Verkoop Systemen (Incl. BTW): € ${totaalSysteemVerkoop.toFixed(2)}`);
+        
+        if(totaalVasteVerkoop > 0) inkoopLog.push(`Smart Home & Zenders (Incl. BTW): € ${totaalVasteVerkoop.toFixed(2)}`);
+        if(totaalProfielenVerkoop > 0) inkoopLog.push(`Losse Profielen (Incl. BTW): € ${totaalProfielenVerkoop.toFixed(2)}`);
+        if(totaalMontageVerkoop > 0) inkoopLog.push(`Opbrengst Montage (Incl. BTW): € ${totaalMontageVerkoop.toFixed(2)}`);
+
+        // BUGFIX 6: Kortingspercentage cap op maximaal 100% en minimaal 0%
+        var kortingInvoer = document.getElementById('korting_percentage');
+        if (parseFloat(kortingInvoer.value) > 100) kortingInvoer.value = 100;
+        if (parseFloat(kortingInvoer.value) < 0) kortingInvoer.value = 0;
+
+        var kortingPerc = parseFloat(kortingInvoer.value) || 0;
+        var kortingBedrag = 0;
+        if(kortingPerc > 0) {
+            kortingBedrag = vSubtotaal * (kortingPerc / 100);
+            document.getElementById('korting_weergave_rij').style.display = 'flex';
+            document.getElementById('korting_bedrag_euro').innerText = "- " + formatBedrag(kortingBedrag);
+        } else {
+            document.getElementById('korting_weergave_rij').style.display = 'none';
+        }
+
+        var vTotaal = vSubtotaal - kortingBedrag;
+        if (vTotaal < 0) vTotaal = 0;
+
+        let verkoopSysteemExBtw = ((totaalSysteemVerkoop + totaalVasteVerkoop + totaalProfielenVerkoop) - kortingBedrag) / 1.21;
+        let winstMateriaal = verkoopSysteemExBtw - totaalSchattingInkoop;
+        
+        inkoopLog.push(`\n💰 BRUTOWINST SCHATTING (EX. BTW):`);
+        inkoopLog.push(`+ Bruto Winst op Systemen, Profielen & Opties: € ${winstMateriaal.toFixed(2)}`);
+        if(totaalMontageVerkoop > 0) {
+            inkoopLog.push(`+ Bruto Montage Opbrengst: € ${(totaalMontageVerkoop/1.21).toFixed(2)}`);
+        }
+        
+        window.inkoopSpecificatieTekst = inkoopLog.join('\n');
+        window.huidigeSubtotaal = vSubtotaal;
+
+        document.getElementById('cart_items').innerHTML = cartHtml;
+        document.getElementById('prijs_basis').innerText = formatBedrag(totaalSysteemVerkoop);
+        
+        document.getElementById('row_smart').style.display = totaalVasteVerkoop > 0 ? "flex" : "none";
+        document.getElementById('prijs_smart').innerText = formatBedrag(totaalVasteVerkoop);
+        
+        document.getElementById('row_profielen').style.display = totaalProfielenVerkoop > 0 ? "flex" : "none";
+        document.getElementById('prijs_profielen').innerText = formatBedrag(totaalProfielenVerkoop);
+
+        document.getElementById('prijs_montage').innerText = formatBedrag(totaalMontageVerkoop);
+        document.getElementById('prijs_totaal').innerText = formatBedrag(vTotaal);
+        
+        var knaam = document.getElementById('klant_naam').value || "Onbekend";
+        document.getElementById('print_klantgegevens').innerHTML = `<strong>Klant:</strong> ${knaam}<br><strong>Adres:</strong> ${document.getElementById('str').value} ${document.getElementById('hn').value}, ${document.getElementById('pc').value}`;
+        document.getElementById('print_inkoop_specificatie').innerText = window.inkoopSpecificatieTekst;
+    }
+
+    document.getElementById('korting_percentage').addEventListener('input', renderWinkelwagen);
+
+    // ============================================================================
+    // 8. FORMSPREE E-MAIL VERZENDEN
+    // ============================================================================
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let heeftProfielen = false;
+        for(let i=0; i<window.profielenTeller; i++){ if(document.getElementById(`prof-lengte-${i}`) && document.getElementById(`prof-lengte-${i}`).value > 0) heeftProfielen = true; }
+        if(winkelwagen.length === 0 && !heeftProfielen) return alert("Voeg eerst een systeem of profiel toe aan de winkelwagen!");
+        
+        var emailInput = document.getElementById('email').value;
+        if (!emailInput || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
+            alert('Vul alstublieft een geldig e-mailadres in voor u verzendt.');
+            return;
+        }
+
+        var btn = document.getElementById('btnSend');
+        var naam = document.getElementById('klant_naam').value;
+        if(!naam) { alert("Vul een klantnaam in."); return; }
+        
+        btn.innerText = "⏳ BEZIG MET VERZENDEN..."; btn.disabled = true;
+
+        var txtVer = "--- INTERNE WERKBON (INKOOP EXCL BTW) ---\n";
+        txtVer += "Klant / Project: " + naam + "\n";
+        txtVer += "Adres: " + document.getElementById('pc').value + " " + document.getElementById('hn').value + "\n\n";
+        txtVer += window.inkoopSpecificatieTekst + "\n\n";
+
+        txtVer += "========================================\n   DEEL 2: OFFERTE KLANT (OM DOOR TE STUREN)\n========================================\n\n";
+        txtVer += "Beste " + naam + ",\n\n";
+        txtVer += "Hartelijk dank voor uw interesse in Sombre Zonwering. Op basis van uw specifieke wensen hebben wij met genoegen het onderstaande overzicht voor u samengesteld.\n\nAlle onderstaande prijzen zijn inclusief 21% BTW.\n\n";
+        
+        txtVer += "**UW BESTELLING**\n";
+        
+        let totaalMontage = 0;
+        let smartTotaal = 0;
+        
+        winkelwagen.forEach((it, index) => {
+            let mtText = (it.sys.includes("Zonnescherm") || it.sys.includes("Uitvalscherm")) ? "Uitval" : "Hoogte";
+            
+            // 1. Voeg merk toe als het er niet is (Heroal of Sombre)
+            let merkPrefix = it.sys.includes("Sombre") ? "" : "Heroal ";
+            let productNaam = merkPrefix + it.sys;
+            
+            // 2. Haal de prijs op van het systeem (incl. afwijkende geleiders/kleuren, excl. zenders/motoren)
+            let systeemPrijs = formatBedrag(it.totaalConsumentSysteem * it.aantal);
+            
+            // 3. Print de productnaam met de prijs er direct achter
+            txtVer += `• ${it.aantal}x ${productNaam} - ${systeemPrijs}\n`;
+            
+            txtVer += `  Dagmaat: ${it.dag_b} x ${it.dag_h} mm\n`;
+            // De Bestelmaat Fabriek is hier verwijderd uit de klantofferte (staat wel al bovenaan de interne bon!)
+            
+            if (!it.sys.includes("Rolluik")) txtVer += `  Doek: ${it.vullingKleur}\n`;
+            else txtVer += `  Lamellen: ${it.vullingKleur}\n`;
+            
+            if (it.opmerking) txtVer += `  Locatie: ${it.opmerking}\n`;
+            if (it.klant.length > 0) it.klant.forEach(k => txtVer += k.replace('+', '  -') + "\n");
+            
+            totaalMontage += (it.montVerkoop * it.aantal);
+            smartTotaal += (it.vasteVerkoopOpties * it.aantal);
+            txtVer += "\n";
+        });
+
+        if(heeftProfielen) {
+            txtVer += "**LOSSE PROFIELEN / AFWERKING**\n";
+            for (let i = 0; i < window.profielenTeller; i++) {
+                if(document.getElementById(`profiel-row-${i}`)) {
+                    let pType = document.getElementById(`prof-type-${i}`).value;
+                    let pKleur = document.getElementById(`prof-kleur-${i}`).value;
+                    if(pKleur.includes("Eigen")) pKleur = "RAL " + document.getElementById(`prof-eigenkleur-${i}`).value;
+                    let pAfw = document.getElementById(`prof-afw-${i}`).value;
+                    let pLengte = parseInt(document.getElementById(`prof-lengte-${i}`).value) || 0;
+                    let pAantal = parseInt(document.getElementById(`prof-aantal-${i}`).value) || 1;
+                    if (pLengte > 0) {
+                        txtVer += `• ${pAantal}x ${pType} (${pLengte} mm) | Kleur: ${pKleur} (${pAfw})\n`;
+                    }
+                }
+            }
+            txtVer += "\n";
+        }
+
+        txtVer += "**PRIJSOPGAVE**\n";
+        txtVer += "• Aluminium systemen (Incl. evt opties): " + document.getElementById('prijs_basis').innerText + "\n";
+        if(smartTotaal > 0) txtVer += "• Motoren, Smart Home / Zenders: " + document.getElementById('prijs_smart').innerText + "\n";
+        if(heeftProfielen) txtVer += "• Losse Afwerkprofielen: " + document.getElementById('prijs_profielen').innerText + "\n";
+        if(totaalMontage > 0) txtVer += "• Vakkundige Montage (Door Sombre Zonwering): " + document.getElementById('prijs_montage').innerText + "\n";
+        
+        let kortingPerc = parseFloat(document.getElementById('korting_percentage').value) || 0;
+        if(kortingPerc > 0) txtVer += `• Persoonlijke Korting Toegepast: ${kortingPerc}%\n`;
+        
+        txtVer += "----------------------------------------\n";
+        txtVer += "TOTAAL (INCL. 21% BTW): " + document.getElementById('prijs_totaal').innerText + "\n\n";
+
+        var kortingBedrag = window.huidigeSubtotaal * (kortingPerc / 100);
+        var actieBedrag = window.huidigeSubtotaal - kortingBedrag;
+        if (actieBedrag < 0) actieBedrag = 0;
+        var b40 = actieBedrag * 0.40;
+        var b20 = actieBedrag * 0.20;
+        
+        txtVer += "BETALINGSCONDITIES\n• 40% Aanbetaling: € " + b40.toLocaleString('nl-NL', {minimumFractionDigits: 2}) + "\n• 20% Bij aanvang: € " + b20.toLocaleString('nl-NL', {minimumFractionDigits: 2}) + "\n• 40% Bij oplevering: € " + b40.toLocaleString('nl-NL', {minimumFractionDigits: 2}) + "\n\n";
+
+        if (totaalMontage > 0) {
+            txtVer += "VOORBEREIDING & WERKPLEK\nOm de montage zo soepel en efficiënt mogelijk te laten verlopen, vragen wij uw aandacht voor het volgende:\n• Vrije werkplek: De ramen of deuren waar de systemen geplaatst worden, dienen zowel binnen (voor stroomdoorvoer) als buiten goed bereikbaar te zijn.\n\n";
+        }
+        
+        txtVer += "GARANTIE & VOORWAARDEN\n• 5 jaar fabrieksgarantie op de motoren en materialen (conform voorwaarden Sombre-Zonwering).\n";
+        if (totaalMontage > 0) txtVer += "• 1 jaar garantie op het montagewerk.\n\n";
+
+        document.getElementById('mail_body').value = txtVer;
+
+        fetch("https://formspree.io/f/xkovrnqj", { method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: emailInput, _subject: "Zonwering Offerte: " + naam, "BESTEL_BON": txtVer })
+        }).then(function(r) {
+            if(r.ok) { 
+                alert("✅ Offerte succesvol verzonden!"); 
+                btn.innerText = "✅ E-MAIL VERZONDEN"; 
+                setTimeout(() => { btn.disabled = false; btn.innerText = "📩 VERZEND OFFERTE / WERKBON"; }, 3000);
+            } else { alert("❌ Fout bij het verzenden."); btn.disabled = false; btn.innerText = "📧 OPNIEUW PROBEREN"; }
+        }).catch(error => { alert("❌ Netwerkfout of verbinding verbroken."); btn.disabled = false; btn.innerText = "📩 OPNIEUW PROBEREN"; });
+    });
+
+    // ============================================================================
+    // 9. PDOK ADRES ZOEKEN (BUGFIX 8: Overlappende verzoeken voorkomen)
+    // ============================================================================
+    var pc = document.getElementById('pc'), hn = document.getElementById('hn'), str = document.getElementById('str');
+    var pdokTimer;
+    var pdokController = null;
+    
+    function zoekAdres() {
+        clearTimeout(pdokTimer);
+        var rawPc = pc.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        var cleanHn = hn.value.trim();
+        var match = rawPc.match(/^(\d{4})([A-Z]{2})$/);
+        
+        if (match && cleanHn !== "") {
+            str.value = "Zoeken...";
+            if (pdokController) pdokController.abort();
+            
+            pdokTimer = setTimeout(() => {
+                pdokController = new AbortController();
+                fetch('https://api.pdok.nl/bzk/locatieserver/search/v3_1/suggest?q=' + encodeURIComponent(match[0] + ' ' + cleanHn), { signal: pdokController.signal })
+                    .then(res => res.json()).then(data => {
+                        if (data.response.docs.length > 0) {
+                            let weergavenaam = data.response.docs[0].weergavenaam;
+                            str.value = weergavenaam ? weergavenaam.split(',')[0] + ", " + weergavenaam.split(',')[1].replace(/[0-9A-Z]{6}/g, '').trim() : "Adres niet gevonden";
+                        }
+                        else str.value = "Adres niet gevonden";
+                    }).catch(err => {
+                        if (err.name !== 'AbortError') str.value = "Fout bij zoeken";
+                    });
+            }, 500);
+        }
+    }
+    pc.addEventListener('input', zoekAdres); hn.addEventListener('input', zoekAdres);
+    window.wisAlles = function() { if(confirm("Winkelwagen leegmaken?")) location.reload(); }
+</script>
+</body>
+</html>
