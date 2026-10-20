@@ -677,12 +677,29 @@
         return interp_top + y_frac * (interp_bottom - interp_top);
     }
 
-    // ============================================================================
+   // ============================================================================
     // 5. UI INITIALISATIE & UPDATES
     // ============================================================================
     function initApp() {
+        // 1. Lees de link uit voor de Make.com/ClickUp automatisering
+        const params = new URLSearchParams(window.location.search);
+        
+        // 2. Vul de velden in als ze in de link staan
+        if (params.has('sys')) document.getElementById('systeem').value = params.get('sys');
+        if (params.has('b')) document.getElementById('maat_b').value = params.get('b');
+        if (params.has('h')) document.getElementById('maat_h').value = params.get('h');
+        if (params.has('klant')) document.getElementById('klant_naam').value = params.get('klant');
+        if (params.has('loc')) document.getElementById('opmerking').value = params.get('loc');
+
+        // 3. Update de schermen en menu's
         updateSysteemUI();
         renderWinkelwagen();
+        
+        // 4. Forceer een herberekening (inclusief kapmaat) als er maten via de link zijn doorgegeven
+        if (params.has('b') && params.has('h')) {
+            autoSelectKap();
+            triggerUpdate();
+        }
     }
 
     function triggerUpdate() {
@@ -720,7 +737,7 @@
             }
         }
     }
-
+   
     function updateSysteemUI() {
         var sys = document.getElementById('systeem').value;
         var isRolluik = sys.includes("Rolluik");
