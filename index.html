@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RS-42 & Heroal - Rolluik & Screen Configurator PRO</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%232c3e50'/><rect x='4' y='4' width='24' height='6' rx='1.5' fill='%23f39200'/><rect x='6' y='13' width='20' height='3' rx='1' fill='%23fff'/><rect x='6' y='18' width='20' height='3' rx='1' fill='%23fff'/><rect x='6' y='23' width='20' height='3' rx='1' fill='%23fff'/></svg>"> <!-- FIX: favicon (rolluik, inline SVG) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAACrUlEQVR42rWWS08UQRDHq6p7uvchwd31QLgaDRrAb+DBg2dvEuNZuWv4BB48oYabSjQxegLjyYOJfgCCRCSaEOWx2UjQ4Guz7LLTj/KwsAzLcthpnMxlMpP6V9XvXzWNwxevwP+8ZPIBERA4MCIDMncTQIDYkfWIGBReECvy3CGAAMbjYL5e0LFjwJTBQSD8aUYb27mIdsuQAIDIsROD+frzy2+L2tgwgWosr7+5VK6d0MIxI7XSt4wF3SxqE3tgBp/qZobYQ0HbUqZpPbWypHaLHKP1Qf3fzdWD5f04+5AFMiIHaniAiFggd7qIkGsmAoD+DAcZFaFpoGYi2tPA1qC1MIyWfhVk1ThITVkKqLq+xa1SW0AmDMDzP04NDIwoJZl712BAhNjYze+bWWkPtYio3miMDp2eeTxJUqSfM+fGxicWPi7nclnv/QHI7FnrLJC0aaeZmYlEJpP17I/cRURIJIKcejA52RZXKlqvbDx6NqO1YoZea2hRi2OzslbRSjEfdNGui70vFQsqkqnTN9Zu/fxNRN0g1xsj5868fPogcF1fvXHr/eLnfC53CDKz1tp5730AZKSM1sx8BGQAQSQSBR4vZLVW+TY1/UIrtcesV8wQx/bLajkJeV9ACKrWtl+9fqeUTBkfwRj7t1oTQnQKtCCPnj87++R+IOSxm7fnP3zqDlkp5Zzz3iMS9L5UmZmIkv3phAwAQgghBMBxH1uYvdZqZb1y595DraLU4WJjlr+uJ53aFgAiauzszC0sKRVB2p+OMbbe2CGi7pAvDA/NTE8G9uTa+MTcwlI+3w1yJKW11nsOWNcYRTL515UdX0gpAytIWqgT8mq5cndqOqNVmkEDAIBmbJZXyknIneu6tl3fe8W9n4kAEPryuS7ruo26eLI/sEXOuWRq/wDsUojbxcjsEAAAAABJRU5ErkJggg=="> <!-- FIX: PNG-icoon voor browsers/telefoons die geen SVG-icoon gebruiken -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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"> <!-- FIX: icoon voor iPhone/iPad beginscherm -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Configurator">
+    <meta name="theme-color" content="#2c3e50">
+    <link rel="manifest" id="pwa_manifest">
+    <script>/* FIX: manifest met icoon (Android: Toevoegen aan beginscherm) */
+    try { var __i192 = "data:image/png;base64,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", __i512 = "data:image/png;base64,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";
+      var __m = { name: "Configurator", short_name: "Configurator", start_url: location.href.split("#")[0], display: "standalone", background_color: "#2c3e50", theme_color: "#2c3e50",
+        icons: [ { src: __i192, sizes: "192x192", type: "image/png", purpose: "any" }, { src: __i512, sizes: "512x512", type: "image/png", purpose: "any" }, { src: __i512, sizes: "512x512", type: "image/png", purpose: "maskable" } ] };
+      document.getElementById("pwa_manifest").href = URL.createObjectURL(new Blob([JSON.stringify(__m)], { type: "application/manifest+json" })); } catch (e) {}
+    </script>
     <style>
         html, body { height: 100%; margin: 0; padding: 0; overflow: auto; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #eef2f5; color: #1c1c1e; }
         #app-container { display: flex; flex-direction: column; padding: 20px; box-sizing: border-box; max-width: 1400px; margin: 0 auto; }
@@ -449,6 +462,15 @@
                         <select id="im_doorvoer"><option value="-">Kies...</option><option>1 (achterkant-onder)</option><option>2 (achterkant-boven)</option><option>3 (bovenkant-achter)</option><option>4 (bovenkant-voor)</option><option>5 (voorzijde-boven)</option><option>6 (voorzijde-midden)</option><option>7 (voorzijde-schuine kant)</option><option>8 (voorzijde onder)</option><option>9 (door de kastpoot)</option><option>10 (niet doorvoeren)</option><option>11 (uit zijkant, zie tekening)</option></select></div>
                     <div class="form-group" style="flex:1; min-width:220px;"><label style="color:#c0392b;">Kabel naar binnen via welke weg? * (niet nodig bij 10)</label>
                         <select id="im_doorvoer_via"><option value="-">Kies...</option><option>Door het kozijn</option><option>Door de muur</option><option>Door de rolluikkast</option><option>Buitenom / opbouwgoot</option></select></div>
+                    <div id="im_solar_groep" style="flex:1 1 100%; display:none; gap:10px; flex-wrap:wrap; background:#eafaf1; border:1px solid #27ae60; border-radius:6px; padding:8px;"> <!-- FIX: solar: geen stroom nodig, wel zonnepaneel-gegevens -->
+                        <div style="flex:1 1 100%; font-weight:bold; color:#1e8449; font-size:13px;">☀️ Solar: geen stroompunt, elektra of wandschakelaar nodig. Vul het zonnepaneel in.</div>
+                        <div class="form-group" style="flex:1; min-width:180px;"><label>Positie zonnepaneel</label>
+                            <select id="im_solar_pos"><option value="-">Niet ingevuld</option><option>Op de kap</option><option>Op de muur naast het systeem</option><option>Los paneel met verlengkabel</option></select></div>
+                        <div class="form-group" style="flex:1; min-width:180px;"><label>Windrichting gevel</label>
+                            <select id="im_solar_richting"><option value="-">Niet ingevuld</option><option>Zuid</option><option>Zuidoost / zuidwest</option><option>Oost / west</option><option>Noordoost / noordwest</option><option>Noord</option></select></div>
+                        <div class="form-group" style="flex:1; min-width:180px;"><label>Schaduw op het paneel</label>
+                            <select id="im_solar_schaduw"><option value="-">Niet ingevuld</option><option>Geen schaduw</option><option>Gedeeltelijk (boom, overstek, buurpand)</option><option>Veel schaduw</option></select></div>
+                    </div>
                     <div class="form-group" style="flex:1 1 100%;"><label>Waar komt de wandschakelaar / bediening? (binnen)</label><input type="text" id="im_schakelaar" placeholder="Bijv. naast het raam, links, 1,2 m hoog"></div>
                     <div class="form-group" style="flex:1; min-width:180px;"><label>Rolluikkast komt...</label>
                         <select id="im_kast"><option value="-">Niet ingevuld</option><option>Op het kozijn</option><option>Op de muur</option><option>In een voorzetkast</option><option>In gevelisolatie</option></select></div>
@@ -530,7 +552,9 @@
                 <div id="overzicht_vast"></div>
                 <div class="res-row dark" id="row_smart" style="display:none !important;"><span class="res-label dark">Smart Home / Motoren & Zenders:</span><span class="res-val dark" id="prijs_smart">€ 0,00</span></div>
                 <div class="res-row dark" id="row_profielen" style="display:none;"><span class="res-label dark">Losse Profielen / Hulpmateriaal:</span><span class="res-val dark" id="prijs_profielen">€ 0,00</span></div>
-                <div class="res-row dark"><span class="res-label dark">Montage & Montagetoeslagen (Groot / Dakkapel):</span><span class="res-val dark" id="prijs_montage">€ 0,00</span></div>
+                <div class="res-row dark"><span class="res-label dark">Montage:</span><span class="res-val dark" id="prijs_montage">€ 0,00</span></div>
+                <div class="res-row dark" id="row_toeslag_groot" style="display:none;"><span class="res-label dark" id="lbl_toeslag_groot">Toeslag groot formaat:</span><span class="res-val dark" id="prijs_toeslag_groot">€ 0,00</span></div> <!-- FIX: alleen zichtbaar als van toepassing -->
+                <div class="res-row dark" id="row_toeslag_dak" style="display:none;"><span class="res-label dark" id="lbl_toeslag_dak">Toeslag montage op dakkapel:</span><span class="res-val dark" id="prijs_toeslag_dak">€ 0,00</span></div>
                 
                 <div class="res-row dark" style="margin-top: 20px; align-items: center; border-bottom: none;">
                     <span class="res-label dark" style="color: #f39200;">Persoonlijke Korting op Materiaal (Procent %):</span>
@@ -574,7 +598,7 @@
     // 1. REKEN INSTELLINGEN & TOESLAGEN
     // ============================================================================
     const VERKOOP_FACTOR_SOMBRE = 1.90;
-    const VERKOOP_FACTOR_HEROAL = 1.70;
+    const VERKOOP_FACTOR_HEROAL = 1.90;
     const BTW_FACTOR = 1.21;
     const BTW_PERCENTAGE = 21;
     const MAX_KORTING_PCT = 10;   // FIX: harde bovengrens korting (marge-bescherming zonder marge-info in de browser)
@@ -629,6 +653,26 @@
 
     // FIX: Interne werkbon: deel 1 voor de monteurs (zonder prijzen), deel 2 inkoop & marge (alleen intern)
     // FIX: tekst voor Formspree (veld BESTEL_BON) ingedeeld voor copy/paste naar Moneybird: contact, regels, profielen, vaste artikelen, controle
+    // FIX: montage en toeslagen apart: toeslag groot formaat / dakkapel alleen als eigen regel als ze echt van toepassing zijn
+    function montageSplits() {
+        let groot = 0, grootN = 0, dak = 0, dakN = 0, totaal = 0;
+        (window.winkelwagen || []).forEach(it => {
+            const t = it.montTotaal || 0; if (t <= 0) return;
+            const g = (it.toeslagGroot || 0) * it.aantal, d = (it.toeslagDakkapel || 0) * it.aantal;
+            totaal += t; groot += g; dak += d; if (g > 0) grootN += it.aantal; if (d > 0) dakN += it.aantal;
+        });
+        return { basis: roundMoney(totaal - groot - dak), groot: roundMoney(groot), grootN: grootN, dak: roundMoney(dak), dakN: dakN, totaal: roundMoney(totaal) };
+    }
+    function updateMontageRijen() {
+        const m = montageSplits();
+        document.getElementById('prijs_montage').innerText = formatBedrag(m.basis);
+        document.getElementById('row_toeslag_groot').style.display = m.groot > 0 ? 'flex' : 'none';
+        document.getElementById('prijs_toeslag_groot').innerText = formatBedrag(m.groot);
+        document.getElementById('lbl_toeslag_groot').innerText = 'Toeslag groot formaat' + (m.grootN > 1 ? ' (' + m.grootN + 'x)' : '') + ':';
+        document.getElementById('row_toeslag_dak').style.display = m.dak > 0 ? 'flex' : 'none';
+        document.getElementById('prijs_toeslag_dak').innerText = formatBedrag(m.dak);
+        document.getElementById('lbl_toeslag_dak').innerText = 'Toeslag montage op dakkapel' + (m.dakN > 1 ? ' (' + m.dakN + 'x)' : '') + ':';
+    }
     function bouwMoneybirdTekst(naamIn) {
         const v = id => { const el = document.getElementById(id); return el ? String(el.value).replace(/[\r\n]+/g, ' ').trim() : ''; };
         const bedragNum = t => Number(String(t).replace('€', '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.')) || 0;
@@ -713,7 +757,12 @@
             heeftVast = true; t += (cat === 'zender' ? "Zender:   " : "Overig:   ") + vast[n].n + "x " + n.replace(/^\s*\+\s*/, '').replace(/^Inclusief\s+/, '') + "   (app: " + eur(ex(vast[n].stuk)) + " per stuk excl. btw)\n";
         }));
         { const tahomaN = Object.keys(vast).filter(n => /Tahoma/i.test(n)).reduce((a, n) => a + vast[n].n, 0); if (tahomaN > 1) t += "LET OP: de app telt Tahoma per systeem (" + tahomaN + "x). Meestal is 1 box per klant genoeg.\n"; }
-        if (montAantal > 0) { heeftVast = true; t += "Montage:  " + montAantal + " systeem/systemen" + (dakkapelAantal > 0 ? ", waarvan " + dakkapelAantal + " op dakkapel" : '') + "   (app: " + eur(ex(montTot)) + " excl. btw in totaal)\n"; }
+        if (montAantal > 0) { // FIX: montage en toeslagen als aparte regels
+            heeftVast = true; const ms = montageSplits();
+            t += "Montage:  " + montAantal + " systeem/systemen   (app: " + eur(ex(ms.basis)) + " excl. btw in totaal)\n";
+            if (ms.grootN > 0) t += "Toeslag groot formaat:  " + ms.grootN + "x   (app: " + eur(ex(ms.groot)) + " excl. btw in totaal)\n";
+            if (ms.dakN > 0) t += "Toeslag montage op dakkapel:  " + ms.dakN + "x   (app: " + eur(ex(ms.dak)) + " excl. btw in totaal)\n";
+        }
         if (!heeftVast) t += "(geen)\n";
 
         // controle
@@ -727,7 +776,7 @@
         t += rijC('Systemen incl. motor', sysTot + motorTot);
         if (vbTot > 0 || profIncl > 0) t += rijC('Profielen / afwerking', vbTot + profIncl);
         if (zenderTot + overigTot > 0) t += rijC('Zenders / overige artikelen', zenderTot + overigTot);
-        if (montTot > 0) t += rijC('Montage', montTot);
+        if (montTot > 0) { const ms = montageSplits(); t += rijC('Montage', ms.basis); if (ms.groot > 0) t += rijC('Toeslag groot formaat', ms.groot); if (ms.dak > 0) t += rijC('Toeslag montage op dakkapel', ms.dak); } // FIX
         if (kortingIncl > 0) t += rijC('Korting (invullen in Moneybird)', -kortingIncl);
         t += "-".repeat(46) + "\n";
         t += "Subtotaal excl. btw:".padEnd(34) + eur(exCenten / 100) + "\n";
@@ -838,9 +887,9 @@
 
 
     // FIX: inmeting lezen / herstellen / leegmaken
-    const INMETING_IDS = ['im_raam','im_scharnieren','im_rooster','im_hor','im_deurkruk','im_platte_kruk','im_doorvoer','im_doorvoer_via','im_schakelaar','im_kast','im_elektra','im_bereik','im_hoogte_grond','im_meet3','im_foto','im_waterkering','im_opstaand','im_opstaand_mm','im_uitvullen_mm','im_nisdiepte','im_ondergrond','im_stroom','im_notitie'];
+    const INMETING_IDS = ['im_raam','im_scharnieren','im_rooster','im_hor','im_deurkruk','im_platte_kruk','im_doorvoer','im_doorvoer_via','im_schakelaar','im_kast','im_elektra','im_bereik','im_hoogte_grond','im_meet3','im_foto','im_waterkering','im_opstaand','im_opstaand_mm','im_uitvullen_mm','im_nisdiepte','im_ondergrond','im_stroom','im_notitie','im_solar_pos','im_solar_richting','im_solar_schaduw'];
     function leesInmeting() { const o = {}; INMETING_IDS.forEach(id => { const e = document.getElementById(id); o[id] = e ? e.value : ''; }); return o; }
-    function resetInmeting() { INMETING_IDS.forEach(id => { const e = document.getElementById(id); if (!e) return; if (e.tagName === 'SELECT') e.selectedIndex = 0; else e.value = ''; }); window.fhtfAuto = false; if (document.getElementById('im_platte_kruk_groep')) document.getElementById('im_platte_kruk_groep').style.display = 'none'; if (document.getElementById('im_geleider_note')) document.getElementById('im_geleider_note').style.display = 'none'; }
+    function resetInmeting() { INMETING_IDS.forEach(id => { const e = document.getElementById(id); if (!e) return; if (e.tagName === 'SELECT') e.selectedIndex = 0; else e.value = ''; }); window.fhtfAuto = false; window.uitvulAuto = false; window.klikAuto = false; window.klikHandmatig = false; if (document.getElementById('im_platte_kruk_groep')) document.getElementById('im_platte_kruk_groep').style.display = 'none'; if (document.getElementById('im_geleider_note')) document.getElementById('im_geleider_note').style.display = 'none'; }
     function setInmeting(o) { resetInmeting(); if (!o) return; INMETING_IDS.forEach(id => { const e = document.getElementById(id); if (e && o[id] !== undefined) e.value = o[id]; }); if (document.getElementById('im_platte_kruk_groep')) document.getElementById('im_platte_kruk_groep').style.display = document.getElementById('im_deurkruk').value === 'Ja' ? 'block' : 'none'; }
     function inmetingTekst(o) {
         if (!o) return '';
@@ -862,6 +911,7 @@
         if (Number(o.im_nisdiepte) > 0) l.push('Nisdiepte: ' + o.im_nisdiepte + ' mm');
         if (o.im_ondergrond && o.im_ondergrond !== '-') l.push('Ondergrond: ' + o.im_ondergrond);
         if (String(o.im_stroom || '').trim()) l.push('Stroompunt: ' + String(o.im_stroom).replace(/[\r\n]+/g, ' '));
+        { const sp = [o.im_solar_pos, o.im_solar_richting, o.im_solar_schaduw].map((x, i) => (x && x !== '-') ? ['Positie ', 'gevel ', 'schaduw: '][i] + x : '').filter(Boolean); if (sp.length) l.push('ZONNEPANEEL: ' + sp.join(', ')); } // FIX
         if (String(o.im_notitie || '').trim()) l.push('Notitie: ' + String(o.im_notitie).replace(/[\r\n]+/g, ' '));
         l.push('Maat op 3 punten gemeten (kleinste maat): ' + (o.im_meet3 === 'Ja' ? 'ja' : 'NEE, controleren!'));
         return l.length ? 'INMETING:\n' + l.map(x => '  - ' + x).join('\n') + '\n' : '';
@@ -876,34 +926,87 @@
     window.kapHandmatig = false; // FIX: handmatige kapkeuze niet meer automatisch overschrijven
     // FIX: kap 137 (Degalux) tot en met 1200 mm hoog; niet leverbaar in de met * gemarkeerde kleuren -> dan 150
     function adviesKapRolluik(hDag, kleur, heroal) { if (heroal) return hDag < 1100 ? 150 : (hDag < 1650 ? 165 : (hDag < 2050 ? 180 : 205)); /* FIX: Heroal heeft geen kap 137 */ if (hDag <= 1200) return String(kleur || '').includes('*') ? 150 : 137; return hDag < 1650 ? 165 : (hDag < 2050 ? 180 : 205); }
-    function inmetingGeleiderCheck() {
+    // FIX: solar-systemen: stroompunt, elektra en wandschakelaar zijn niet nodig; zonnepaneel-velden erbij; doorvoer = paneel-/motorkabel
+    function updateSolarUI() {
+        const solar = (document.getElementById('systeem').value || '').includes('Solar');
+        ['im_stroom', 'im_elektra', 'im_schakelaar'].forEach(id => {
+            const e = document.getElementById(id); if (!e || !e.parentElement) return;
+            e.parentElement.style.display = solar ? 'none' : '';
+            if (solar) e.value = (e.tagName === 'SELECT') ? '-' : '';
+        });
+        const g = document.getElementById('im_solar_groep');
+        if (g) { g.style.display = solar ? 'flex' : 'none'; if (!solar) ['im_solar_pos', 'im_solar_richting', 'im_solar_schaduw'].forEach(id => { const e = document.getElementById(id); if (e) e.value = '-'; }); }
+        const dl = document.getElementById('im_doorvoer') && document.getElementById('im_doorvoer').previousElementSibling;
+        const vl = document.getElementById('im_doorvoer_via') && document.getElementById('im_doorvoer_via').previousElementSibling;
+        if (dl) dl.textContent = solar ? 'Doorvoer paneel-/motorkabel (zelfde keuzes als in het portaal) *' : 'Doorvoer bediening (zelfde keuzes als in het portaal) *';
+        if (vl) vl.textContent = solar ? 'Kabel naar binnen via welke weg? * (niet nodig bij 10)' : 'Kabel naar binnen via welke weg? * (niet nodig bij 10)';
+    }
+    // FIX: hor / luchtrooster / waterkering -> uitvullen automatisch 10 mm; daarna verplicht geleiderkeuze (rolluik: LHTF of FHTF; screen: klik-/opvul-/LHTF-geleider)
+    function uitvulTriggerActief() {
+        const v = id => { const e = document.getElementById(id); return e ? e.value : ''; };
+        return v('im_rooster') !== 'Nee' || v('im_hor') !== 'Nee' || v('im_waterkering') === 'Ja';
+    }
+    window.uitvulAuto = false; window.klikAuto = false; window.klikHandmatig = false;
+    function inmetingGeleiderCheck(zonderVullen) {
         const sys = document.getElementById('systeem').value;
         const isRol = sys.includes('Rolluik');
         const trig = inmetingTriggerActief();
         document.getElementById('im_platte_kruk_groep').style.display = document.getElementById('im_deurkruk').value === 'Ja' ? 'block' : 'none';
+        updateSolarUI();
+        const uv = document.getElementById('im_uitvullen_mm');
+        if (!zonderVullen) {
+            if (uitvulTriggerActief()) { if (!(Number(uv.value) > 0)) { uv.value = '10'; window.uitvulAuto = true; } }
+            else if (window.uitvulAuto) { uv.value = ''; window.uitvulAuto = false; }
+        }
+        const mm = Number(uv.value) > 0 ? Number(uv.value) : (trig ? 10 : 0);
         const note = document.getElementById('im_geleider_note');
         const gl = document.getElementById('geleider_l'), gr = document.getElementById('geleider_r');
         let tekst = '';
         if (isRol) {
+            const FH = ['FHTF-12', 'FHTF-20'], advies = mm > 12 ? 'FHTF-20' : 'FHTF-12';
+            let wijzig = false;
             if (trig && !window.fhtfAuto && gl.value === 'HTF 53' && gr.value === 'HTF 53') {
-                gl.value = 'FHTF-12'; gr.value = 'FHTF-12'; window.fhtfAuto = true;
-                if (typeof triggerUpdate === 'function') triggerUpdate();
+                gl.value = advies; gr.value = advies; window.fhtfAuto = true; wijzig = true;
+            } else if (trig && window.fhtfAuto && FH.includes(gl.value) && gl.value === gr.value && gl.value !== advies) {
+                gl.value = advies; gr.value = advies; wijzig = true;
             } else if (!trig && window.fhtfAuto) {
-                if (gl.value === 'FHTF-12') gl.value = 'HTF 53';
-                if (gr.value === 'FHTF-12') gr.value = 'HTF 53';
-                window.fhtfAuto = false;
-                if (typeof triggerUpdate === 'function') triggerUpdate();
+                if (FH.includes(gl.value)) gl.value = 'HTF 53';
+                if (FH.includes(gr.value)) gr.value = 'HTF 53';
+                window.fhtfAuto = false; wijzig = true;
             }
-            if (trig && window.fhtfAuto) tekst = 'Geleiders automatisch op FHTF 53x22+12 gezet vanwege de inmeting. Je kunt dit nog wijzigen naar LHTF 53 of FHTF 53x22+20.';
+            if (wijzig && typeof triggerUpdate === 'function') triggerUpdate();
+            const OK_ROL = ['LHTF 53', 'FHTF-12', 'FHTF-20'];
+            if (trig && window.fhtfAuto) tekst = 'Uitvullen ' + mm + ' mm: geleiders automatisch op ' + (advies === 'FHTF-12' ? 'FHTF 53x22+12' : 'FHTF 53x22+20') + ' gezet. Je kunt dit nog wijzigen naar LHTF 53 of FHTF 53x22+20.';
+            else if (trig && !(OK_ROL.includes(gl.value) && OK_ROL.includes(gr.value))) tekst = 'Let op: bij deze inmeting moet bij een rolluik een LHTF- of FHTF-geleider gekozen worden (links én rechts).';
+            if (trig && gl.value === 'FHTF-12' && mm > 12) tekst += ' Let op: FHTF-12 vult maar 12 mm uit, kies FHTF-20.';
         } else if (trig) {
-            tekst = 'Let op: bij een screen moeten bij deze inmeting klikgeleiders (uitvullen), een opvulgeleider of LHTF-geleiders gebruikt worden.';
+            const kl = document.getElementById('klik_l'), kr = document.getElementById('klik_r');
+            const STD = ["HTF 30x28", "Standaard Geleider (Breedte: 37,5 mm)", "Klikgeleider (Standaard)"];
+            const n = Math.min(6, Math.max(1, Math.ceil(mm / 10)));
+            let gewijzigd = false;
+            [[gl, kl], [gr, kr]].forEach(p => {
+                if (window.klikHandmatig) return;
+                if (STD.includes(p[0].value)) { if (p[1].value !== String(n)) { p[1].value = String(n); gewijzigd = true; } window.klikAuto = true; }
+                else if (window.klikAuto && p[1].value !== '0') { p[1].value = '0'; gewijzigd = true; }
+            });
+            if (gewijzigd && typeof triggerUpdate === 'function') triggerUpdate();
+            tekst = 'Uitvullen ' + mm + ' mm: ' + (window.klikAuto && !window.klikHandmatig ? 'klikgeleiders automatisch ingevuld (' + n + ' per kant met standaard geleider). ' : '') + 'Bij een screen moeten klikgeleiders (uitvullen), een opvulgeleider of LHTF-geleiders gebruikt worden, links én rechts.' + (Math.ceil(mm / 10) > 6 ? ' Let op: meer dan 6 klikgeleiders per kant kan niet, kies een opvul-/LHTF-geleider.' : '');
+        } else if (window.klikAuto) {
+            if (!window.klikHandmatig) { document.getElementById('klik_l').value = '0'; document.getElementById('klik_r').value = '0'; if (typeof triggerUpdate === 'function') triggerUpdate(); }
+            window.klikAuto = false; window.klikHandmatig = false;
         }
         note.textContent = tekst; note.style.display = tekst ? 'block' : 'none';
         if (typeof updatePreview === 'function') updatePreview();
     }
     ['im_rooster','im_hor','im_deurkruk','im_waterkering','im_opstaand','im_platte_kruk'].forEach(id => {
-        const e = document.getElementById(id); if (e) e.addEventListener('change', inmetingGeleiderCheck);
+        const e = document.getElementById(id); if (e) e.addEventListener('change', () => inmetingGeleiderCheck());
     });
+    (function () { // FIX: handmatige wijzigingen worden niet overschreven; geleider- of mm-wijziging past de automatische keuze aan
+        const uv = document.getElementById('im_uitvullen_mm');
+        if (uv) uv.addEventListener('input', () => { window.uitvulAuto = false; inmetingGeleiderCheck(true); });
+        ['klik_l', 'klik_r'].forEach(id => { const e = document.getElementById(id); if (e) e.addEventListener('input', () => { window.klikHandmatig = true; }); });
+        ['geleider_l', 'geleider_r'].forEach(id => { const e = document.getElementById(id); if (e) e.addEventListener('change', () => inmetingGeleiderCheck(true)); });
+    })();
 
     const GELEIDER_BREEDTES = {
         "HTF 53": 53, "LHTF 53": 53, "HF 45": 45, "LHF 45": 45,
@@ -1411,7 +1514,7 @@
         checkEigenDoekKleur();
         updateValseVensterbankUI();
         updateBestelmaat();
-        window.fhtfAuto = false; if (typeof inmetingGeleiderCheck === 'function') inmetingGeleiderCheck(); // FIX
+        window.fhtfAuto = false; window.klikAuto = false; window.klikHandmatig = false; if (typeof inmetingGeleiderCheck === 'function') inmetingGeleiderCheck(); // FIX
     }
     
     function updateValseVensterbankUI() {
@@ -1774,13 +1877,16 @@
             else if (zender === "Ysia Patio") voegVasteOptieToe(129, `  + Zender: Somfy Ysia Patio`); // FIX: vaste verkoopprijs € 129 incl. btw
         } else {
             // Heroal motoren
-            if (motor === "Somfy RS 100 IO") voegInkoopOptieToe(222, `  + Motor: Somfy RS100 IO | Kant: ${motorKant} (van buitenaf gezien)`);
-            else if (motor === "Somfy Ilmo WT") voegInkoopOptieToe(177, `  + Motor: Somfy Ilmo WT (Schakelaar) | Kant: ${motorKant} (van buitenaf gezien)`);
-            else if (motor === "Somfy RS100 Solar IO") voegInkoopOptieToe(361, `  + Motor: Somfy RS100 Solar IO | Kant: ${motorKant} (van buitenaf gezien)`);
-            else if (motor === "Somfy Sunilus IO") voegInkoopOptieToe(182, `  + Motor: Somfy Sunilus IO | Kant: ${motorKant} (van buitenaf gezien)`);
-            else if (motor === "Somfy Maestria IO") voegInkoopOptieToe(198, `  + Motor: Somfy Maestria IO (Obstakel) | Kant: ${motorKant} (van buitenaf gezien)`);
-            else if (motor === "Somfy LT WT") voegInkoopOptieToe(132, `  + Motor: Somfy LT WT (Schakelaar) | Kant: ${motorKant} (van buitenaf gezien)`);
-            else if (motor === "Somfy Solar IO") voegInkoopOptieToe(298, `  + Motor: Somfy Solar IO | Kant: ${motorKant} (van buitenaf gezien)`);
+            // FIX: bij Heroal zit de motor in de systeemprijs: geen apart motorbedrag (zet HEROAL_MOTOR_INBEGREPEN op false om motoren weer apart te rekenen)
+            const HEROAL_MOTOR_INBEGREPEN = true;
+            function heroalMotor(inkoop, tekst) { if (HEROAL_MOTOR_INBEGREPEN) klant.push(tekst.replace(/^(\s*\+ Motor: [^|]*?)( \|)/, '$1 (inbegrepen)$2')); else voegInkoopOptieToe(inkoop, tekst); } // FIX
+            if (motor === "Somfy RS 100 IO") heroalMotor(222, `  + Motor: Somfy RS100 IO | Kant: ${motorKant} (van buitenaf gezien)`);
+            else if (motor === "Somfy Ilmo WT") heroalMotor(177, `  + Motor: Somfy Ilmo WT (Schakelaar) | Kant: ${motorKant} (van buitenaf gezien)`);
+            else if (motor === "Somfy RS100 Solar IO") heroalMotor(361, `  + Motor: Somfy RS100 Solar IO | Kant: ${motorKant} (van buitenaf gezien)`);
+            else if (motor === "Somfy Sunilus IO") heroalMotor(182, `  + Motor: Somfy Sunilus IO | Kant: ${motorKant} (van buitenaf gezien)`);
+            else if (motor === "Somfy Maestria IO") heroalMotor(198, `  + Motor: Somfy Maestria IO (Obstakel) | Kant: ${motorKant} (van buitenaf gezien)`);
+            else if (motor === "Somfy LT WT") heroalMotor(132, `  + Motor: Somfy LT WT (Schakelaar) | Kant: ${motorKant} (van buitenaf gezien)`);
+            else if (motor === "Somfy Solar IO") heroalMotor(298, `  + Motor: Somfy Solar IO | Kant: ${motorKant} (van buitenaf gezien)`);
             else klant.push(`  + Motor: ${motor} | Kant: ${motorKant} (van buitenaf gezien)`);
 
             if (zender === "Situo 1 IO") voegVasteOptieToe(ZENDER_VERKOOP_SOMFY_1, `  + Zender: Somfy Situo 1 IO`, 58); // FIX
@@ -1813,6 +1919,10 @@
             const okL = kl_ > 0 || OK_GEL.includes(document.getElementById('geleider_l').value);
             const okR = kr_ > 0 || OK_GEL.includes(document.getElementById('geleider_r').value);
             if (!okL || !okR) errorMsg = '❌ Bij luchtrooster, hor, waterkering, opstaande rand of deurkruk moeten bij een screen klikgeleiders (uitvullen) of een LHTF-/opvulgeleider gebruikt worden, links én rechts.';
+        }
+        if (!errorMsg && isRolluik && inmetingTriggerActief()) { // FIX: rolluik: LHTF- of FHTF-geleider verplicht bij hor, luchtrooster, waterkering, opstaande rand of deurkruk
+            const OK_ROL = ['LHTF 53', 'FHTF-12', 'FHTF-20'];
+            if (!OK_ROL.includes(document.getElementById('geleider_l').value) || !OK_ROL.includes(document.getElementById('geleider_r').value)) errorMsg = '❌ Bij luchtrooster, hor, waterkering, opstaande rand of deurkruk moet bij een rolluik een LHTF- of FHTF-geleider gebruikt worden, links én rechts.';
         }
         const STANDAARD_GELEIDERS = ["HTF 30x28", "Standaard Geleider (Breedte: 37,5 mm)", "Klikgeleider (Standaard)"];
         const klikL = isRolluik ? 0 : Number(document.getElementById('klik_l').value) || 0;
@@ -1976,6 +2086,7 @@
         } else if (bestelB > GROOT_SCREEN_BREEDTE_MM || oppervlakteM2 >= GROOT_SCREEN_M2) {
             waarschuwingen.push('⚠️ Grote screen: controleer bij de leverancier of dit doek en deze motor voor deze maat zijn toegestaan (windklasse).');
         }
+        if (sys.includes('Solar') && (zender === 'Geen' || !zender)) waarschuwingen.push('⚠️ Solar-motor werkt alleen met een zender: kies een zender (een vaste schakelaar is niet mogelijk).'); // FIX
         { const dv = document.getElementById('im_doorvoer'), dvv = document.getElementById('im_doorvoer_via');
           if (!dv || dv.value === '-' || (!dv.value.startsWith('10 ') && (!dvv || dvv.value === '-'))) waarschuwingen.push('⚠️ Kabeldoorvoer nog niet ingevuld (verplicht om toe te voegen).'); }
         let totaalMontagePerStuk = roundMoney(montVerkoop + toeslagGroot + toeslagDakkapel);
@@ -2331,7 +2442,7 @@
             document.getElementById('prijs_basis').innerText = "€ 0,00";
             document.getElementById('prijs_smart').innerText = "€ 0,00";
             document.getElementById('prijs_profielen').innerText = "€ 0,00";
-            document.getElementById('prijs_montage').innerText = "€ 0,00";
+            updateMontageRijen(); // FIX
             document.getElementById('row_smart').style.display = "none";
             document.getElementById('overzicht_systemen').innerHTML = ''; document.getElementById('overzicht_vast').innerHTML = ''; // FIX
             document.getElementById('row_profielen').style.display = "none";
@@ -2407,7 +2518,7 @@
         document.getElementById('row_profielen').style.display = totaalProfielenVerkoop > 0 ? "flex" : "none";
         document.getElementById('prijs_profielen').innerText = formatBedrag(totaalProfielenVerkoop);
 
-        document.getElementById('prijs_montage').innerText = formatBedrag(totaalMontageVerkoop);
+        updateMontageRijen(); // FIX: montage en toeslagen als aparte regels
         document.getElementById('prijs_totaal').innerText = formatBedrag(vTotaal);
         
         var knaam = document.getElementById('klant_naam').value || "Onbekend";
@@ -2492,7 +2603,7 @@
             // FIX: nieuwe indeling: product + maten + prijs op 1 regel, dan kast, kleur, motor, zender, extra's, doek, locatie
             txtVer += `• ${it.aantal}x ${productNaam} - (${it.dag_b}mm x ${it.dag_h}mm) ${systeemPrijs}\n`;
             const tok = k => k.replace(/\{\{P:([0-9.]+)\}\}/g, (m, pr) => formatBedrag(roundMoney(Number(pr) * it.aantal))); // FIX
-            const kl = (it.klant || []).filter(k => !k.includes('Toeslag groot/zwaar') && !k.includes('Toeslag grote screen'));
+            const kl = (it.klant || []).filter(k => !/Toeslag/.test(k));
             const isK = (k, v) => k.trim().replace(/^\+\s*/, '').startsWith(v);
             const volgorde = ['Kast / Bak', 'Kleur Kast/Geleiders', 'Motor', 'Zender'];
             const gebruikt = new Set();
@@ -2544,7 +2655,7 @@
             }
         }
         if (heeftProfielen) prijsRijen.push({ label: 'Losse afwerkprofielen', bedrag: bedragNum(document.getElementById('prijs_profielen').innerText) });
-        if (totaalMontage > 0) prijsRijen.push({ label: 'Vakkundige montage & toeslagen', bedrag: bedragNum(document.getElementById('prijs_montage').innerText) });
+        if (totaalMontage > 0) { const ms = montageSplits(); prijsRijen.push({ label: 'Vakkundige montage', bedrag: ms.basis }); /* FIX: toeslagen alleen als eigen regel */ if (ms.groot > 0) prijsRijen.push({ label: 'Toeslag groot formaat' + (ms.grootN > 1 ? ' (' + ms.grootN + 'x)' : ''), bedrag: ms.groot }); if (ms.dak > 0) prijsRijen.push({ label: 'Toeslag montage op dakkapel' + (ms.dakN > 1 ? ' (' + ms.dakN + 'x)' : ''), bedrag: ms.dak }); }
         let kortingPerc = Number(document.getElementById('korting_percentage').value) || 0;
         kortingPerc = Math.min(MAX_KORTING_PCT, Math.max(0, kortingPerc)); // FIX: max 10% i.p.v. 100%
         if (kortingPerc > 0) prijsRijen.push({ label: 'Persoonlijke korting op materiaal (' + kortingPerc + '%)', bedrag: -(window.huidigeKortingBedrag || 0) });
@@ -2576,6 +2687,7 @@
         txtVer += "GARANTIE & VOORWAARDEN\n• 5 jaar fabrieksgarantie op de motoren en materialen.\n";
         if (totaalMontage > 0) txtVer += "• 1 jaar garantie op het montagewerk.\n\n";
 
+        if (winkelwagen.length && winkelwagen.every(it => it.sys.includes('Solar'))) txtVer = txtVer.replace(' (voor stroomdoorvoer)', ''); // FIX: solar heeft geen stroom nodig
         txtVer = bouwMoneybirdTekst(naam); // FIX: Formspree-tekst ingedeeld voor Moneybird
         document.getElementById('mail_body').value = txtVer;
 
@@ -2777,4 +2889,4 @@
     })();
 </script>
 </body>
-</html>html>
+</html>
